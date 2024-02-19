@@ -26,59 +26,59 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
+    const session: any = await getServerSession(req, res, authOptions)
+    const externalID = session.token.sub
+
+    if (!session) {
+        // Not Signed in
+        res.status(401).json({ error: "You must be signed in to do that" });
+        return;
+    }
+
     const slug = body["newProject"].replace(/ /g, "-").toLowerCase();
 
-    const projectExists = await sql`SELECT * FROM projects WHERE slug = ${slug}`
+    const projectExists = await sql`SELECT * FROM projects WHERE slug = ${slug} AND user_id = (SELECT id FROM users WHERE external_id = ${externalID})`
 
     if (projectExists.length > 0) {
         res.status(409).json({ error: "Project already exists" });
         return;
     }
-
-    const session: any = await getServerSession(req, res, authOptions)
-    const externalID = session.token.sub
     
-      if (session) {
-          let response;
+    let response;
 
-          let userID = -1 
-          
-          try {
-              const result = await sql`SELECT id FROM users WHERE external_id = ${externalID}`
-              userID = result[0].id
-          } catch (error) {
-              console.log(error)
-              res.status(500).json({ error: "Internal server error" })
-              return;
-          }
-
-          if (userID === -1) {
-              res.status(404).json({ error: "User not found" })
-              return;
-          }
-
-          if (slug === "") {
-                res.status(400).json({ error: "Project name cannot be empty" });
-                return;
-          }
-          
-          try {
-              response = await sql`
-                  INSERT INTO projects (user_id, project_name, slug)
-                  VALUES
-                  (${userID},${body["newProject"]},${slug})
-              `
-          } catch (error) {
-              console.log(error)
-              res.status(500).json({ error: "Something went wrong" });
-              return;
-          }
-          
-          res.status(200).json({ response });
-          return;
-      } else {
-        // Not Signed in
-        res.status(401).json({ error: "You must be signed in to do that" });
+    let userID = -1 
+    
+    try {
+        const result = await sql`SELECT id FROM users WHERE external_id = ${externalID}`
+        userID = result[0].id
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: "Internal server error" })
         return;
-      }
+    }
+
+    if (userID === -1) {
+        res.status(404).json({ error: "User not found" })
+        return;
+    }
+
+    if (slug === "") {
+        res.status(400).json({ error: "Project name cannot be empty" });
+        return;
+    }
+    
+    try {
+        response = await sql`
+            INSERT INTO projects (user_id, project_name, slug)
+            VALUES
+            (${userID},${body["newProject"]},${slug})
+        `
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: "Something went wrong" });
+        return;
+    }
+    
+    res.status(200).json({ response });
+    return;
 }
