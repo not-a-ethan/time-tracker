@@ -28,7 +28,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const slug = body["newProject"].replace(/ /g, "-").toLowerCase();
 
-    // checks if project exists
+    const projectExists = await sql`SELECT * FROM projects WHERE slug = ${slug}`
+
+    if (projectExists.length > 0) {
+        res.status(409).json({ error: "Project already exists" });
+        return;
+    }
 
     const session: any = await getServerSession(req, res, authOptions)
     const externalID = session.token.sub
@@ -50,6 +55,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           if (userID === -1) {
               res.status(404).json({ error: "User not found" })
               return;
+          }
+
+          if (slug === "") {
+                res.status(400).json({ error: "Project name cannot be empty" });
+                return;
           }
           
           try {
