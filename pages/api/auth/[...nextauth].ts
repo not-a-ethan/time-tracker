@@ -21,6 +21,7 @@ export const authOptions: any = {
     ],
     callbacks: {
         signIn: async (user: any, account: Account, profile: Profile) => {
+            createNewUser(user.account.providerAccountId, user.account.provider, user.profile.login)
             // // Read EXTERNAL ID with `user.account.providerAccountId`
             return true;
         },

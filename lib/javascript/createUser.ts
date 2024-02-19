@@ -11,17 +11,7 @@ const sql: any = postgres({
    },
 });
 
-interface messageType {
-   user: any,
-   account: any,
-   profile: any,
-   isNewUser: boolean
-}
-
-async function createNewUser(message: messageType) {   
-   const externalUsername = message.user.name;
-   const externalId = Number(message.user.id);
-   const oAuthProvider = message.account.provider;
+async function createNewUser(externalId: number, oAuthProvider: string, externalUsername: string) {   
 
    const users = await sql`SELECT * FROM users WHERE external_id = ${externalId} AND external_provider = ${oAuthProvider};`
    

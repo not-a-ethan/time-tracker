@@ -35,8 +35,6 @@ function Index() {
         return <p>Access Denied</p>
     }
 
-    console.log(session)
-
     return (
         <div className={styles.container}>
             <Head>
