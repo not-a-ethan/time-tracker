@@ -15,7 +15,7 @@ function Index() {
 
     
     useEffect(() => {
-        fetch('/api/newProject', {
+        fetch('/api/project/new', {
             method: 'GET',
         })
         .then(response => response.json())
@@ -52,7 +52,7 @@ function Index() {
 
                     <iframe name="dummyframe" id="dummyframe" className={styles.iframe}></iframe>
 
-                    <form method="POST" action="/api/newProject" target="dummyframe">
+                    <form method="POST" action="/api/project/new" target="dummyframe">
                         <input type="text" name="newProject" placeholder="New Project" />
                         <input type="submit" value="Create Project" />
                     </form>
