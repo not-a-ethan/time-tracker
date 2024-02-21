@@ -69,6 +69,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
+    const slug = body["name"].replace(/ /g, "-").toLowerCase();
+
+    if (slug === "") {
+        res.status(400).json({ error: "newProject cannot be empty" });
+        return;
+    }
+
     let response;
 
     try {
@@ -76,7 +83,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         response = sql`
         INSERT INTO timeentries
         VALUES 
-        (${userID},${body["project_id"]},${body["name"]},${body["slug"]},${body["time_seconds"]},${currentTime})
+        (${userID},${body["project_id"]},${body["name"]},${slug},${body["time_seconds"]},${currentTime})
         `
     } catch (error) {
         res.status(500).json({ error: "Something went wrong" });
