@@ -1,18 +1,22 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
+import Script from 'next/script'
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+import { useRouter } from 'next/router'
 
 import { useSession, getSession } from "next-auth/react"
 
 import styles from '../styles/Home.module.css'
 
+import { main } from '../lib/javascript/getProjects'
+
 function Index() {
+    const [projects, setProjects] = useState([]);
     const router = useRouter();
 
     const { data: session, status } = useSession()
-
     
     useEffect(() => {
         fetch('/api/project/new', {
@@ -26,13 +30,18 @@ function Index() {
             // Handle any errors here
         });
     }, []);
+
+    useEffect(() => {
+        main();
+    }, []);
+
     if (status === "loading") {
-        return <p>Loading...</p>
+        return (<p>Loading...</p>)
     }
 
     if (status === "unauthenticated") {
         router.push("/login")
-        return <p>Access Denied</p>
+        return (<p>Access Denied</p>)
     }
 
     return (
@@ -56,6 +65,13 @@ function Index() {
                         <input type="text" name="newProject" placeholder="New Project" />
                         <input type="submit" value="Create Project" />
                     </form>
+                </div>
+
+                <div>
+                    {/*A list of projects*/}
+                    <ul id="projectList">
+                    
+                    </ul>
                 </div>
             </main>
         </div>
