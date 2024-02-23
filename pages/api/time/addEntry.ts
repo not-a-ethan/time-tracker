@@ -93,12 +93,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     let response;
 
-    console.log(userID)
-    console.log(projectID)
-    console.log(body["name"])
-    console.log(slug)
-    console.log(body["time_seconds"])
-
     try {
         const currentTime = new Date();
         response = await sql`
@@ -107,7 +101,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         (${userID},${projectID},${slug},${slug},${body["time_seconds"]},${currentTime})
         `
     } catch (error) {
-        console.log(error)
         res.status(500).json({ error: "Something went wrong when trying to add it to the DB" });
         return;
     }

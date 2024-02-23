@@ -52,7 +52,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const result = await sql`SELECT id FROM users WHERE external_id = ${externalID}`
         userID = result[0].id
     } catch (error) {
-        console.log(error)
         res.status(500).json({ error: "Internal server error" })
         return;
     }
@@ -74,7 +73,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             (${userID},${body["newProject"]},${slug})
         `
     } catch (error) {
-        console.log(error)
         res.status(500).json({ error: "Something went wrong" });
         return;
     }

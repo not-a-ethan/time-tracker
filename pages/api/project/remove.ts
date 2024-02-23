@@ -41,7 +41,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         userID = await sql`SELECT id FROM users WHERE external_id = ${externalID}`
     } catch (error) {
-        console.log(error)
         res.status(500).json({ error: "Internal server error. Can not get user" })
         return;
     }
@@ -53,7 +52,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         projectExists = await sql`SELECT * FROM projects WHERE slug = ${slug} AND user_id = ${userID}`
     } catch (e) {
-        console.log(e)
         res.status(500).json({ error: "Internal server error. Can not get project" })
         return;
     }
@@ -68,7 +66,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         response = await sql`DELETE FROM projects WHERE slug = ${slug} AND user_id = ${userID}`
     } catch (error) {
-        console.log(error)
         res.status(500).json({ error: "Internal server error. Was not able to delete project" })
         return;
     }
