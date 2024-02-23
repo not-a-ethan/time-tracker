@@ -79,6 +79,18 @@ function Index() {
                         <input type="submit" value="Delete Project" />
                     </form>
                 </div>
+
+                <div>
+                    {/*A form to make a new project*/}
+
+                    <iframe name="dummyframe3" id="dummyframe" className={styles.iframe}></iframe>
+
+                    <form method="POST" action="/api/time/addEntry" target="dummyframe3">
+                        <input type="text" name="slug" placeholder="Project name" />
+                        <input type="number" name="time_seconds" placeholder="Num of seconds" />
+                        <input type="submit" value="Delete Project" />
+                    </form>
+                </div>
             </main>
         </div>
     )

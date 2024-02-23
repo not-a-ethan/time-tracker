@@ -35,22 +35,44 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    if (typeof body["time_seconds"] !== "number") {
+    const time_seconds = Number(body["time_seconds"])
+
+    if (typeof time_seconds !== "number") {
         res.status(400).json({ error: "time_seconds must be a number" });
+        return;
+    } else if (time_seconds <= 0) {
+        res.status(400).json({ error: "time_seconds must be greater than 0" });
         return;
     }
 
-    if (typeof body["project_id"] !== "number") {
-        res.status(400).json({ error: "project_id must be a number" });
+    const slug = body["slug"]
+
+    if (slug === "") {
+        res.status(400).json({ error: "slug cannot be empty" });
+        return;
+    }
+
+    let projectID = -1;
+
+    try {
+        const result = await sql`SELECT id FROM projects WHERE slug = ${body["slug"]} AND user_id = (SELECT id FROM users WHERE external_id = ${externalID})`
+        projectID = result[0].id
+    } catch (e) {
+        res.status(500).json({ error: "Internal server error. Couldnt get Project ID" });
         return;
     }
 
     let projectExists;
 
     try {
-        projectExists = await sql`SELECT * FROM projects WHERE id = ${body["project_id"]} AND user_id = (SELECT id FROM users WHERE external_id = ${externalID})`
+        projectExists = await sql`SELECT * FROM projects WHERE id = ${projectID} AND user_id = (SELECT id FROM users WHERE external_id = ${externalID})`
     } catch (error) {
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error. Couldnt get the project" });
+        return;
+    }
+
+    if (projectExists.length === 0) {
+        res.status(404).json({ error: "Project doesnt exist" });
         return;
     }
 
@@ -60,33 +82,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const result = await sql`SELECT id FROM users WHERE external_id = ${externalID}`
         userID = result[0].id
     } catch (error) {
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error. Couldnt get user ID" });
         return;
     }
 
     if (userID === -1) {
-        res.status(500).json({ error: "Internal server error" });
-        return;
-    }
-
-    const slug = body["name"].replace(/ /g, "-").toLowerCase();
-
-    if (slug === "") {
-        res.status(400).json({ error: "newProject cannot be empty" });
+        res.status(500).json({ error: "Internal server error. Couldnt find user" });
         return;
     }
 
     let response;
 
+    console.log(userID)
+    console.log(projectID)
+    console.log(body["name"])
+    console.log(slug)
+    console.log(body["time_seconds"])
+
     try {
         const currentTime = new Date();
-        response = sql`
-        INSERT INTO timeentries
+        response = await sql`
+        INSERT INTO timeentries (user_id, project_id, entry_name, slug, time_seconds, time_added)
         VALUES 
-        (${userID},${body["project_id"]},${body["name"]},${slug},${body["time_seconds"]},${currentTime})
+        (${userID},${projectID},${slug},${slug},${body["time_seconds"]},${currentTime})
         `
     } catch (error) {
-        res.status(500).json({ error: "Something went wrong" });
+        console.log(error)
+        res.status(500).json({ error: "Something went wrong when trying to add it to the DB" });
         return;
     }
 
