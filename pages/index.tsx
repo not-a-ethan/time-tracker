@@ -16,19 +16,6 @@ function Index() {
     const router = useRouter();
 
     const { data: session, status } = useSession()
-    
-    useEffect(() => {
-        fetch('/api/project/new', {
-            method: 'GET',
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Handle the data from the response here
-        })
-        .catch(error => {
-            // Handle any errors here
-        });
-    }, []);
 
     useEffect(() => {
         const observer = new MutationObserver(() => {
