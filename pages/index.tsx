@@ -68,6 +68,17 @@ function Index() {
                     
                     </ul>
                 </div>
+
+                <div>
+                    {/*A form to make a new project*/}
+
+                    <iframe name="dummyframe2" id="dummyframe" className={styles.iframe}></iframe>
+
+                    <form method="POST" action="/api/project/remove" target="dummyframe2">
+                        <input type="text" name="slug" placeholder="Project name" />
+                        <input type="submit" value="Delete Project" />
+                    </form>
+                </div>
             </main>
         </div>
     )

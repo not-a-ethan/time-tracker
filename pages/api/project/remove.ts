@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const query = req.query;
     const body = req.body;
 
-    if (method !== "DELETE") {
+    if (method !== "POST") {
         res.status(418).json({ error: "Wrong method. Remember I am a Tea Pot" });
     }
 
@@ -30,24 +30,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const session: any = await getServerSession(req, res, authOptions)
     const externalID = session.token.sub
 
-    let userID = -1
-
-    try {
-        userID = await sql`SELECT id FROM users WHERE external_id = ${externalID}`
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({ error: "Internal server error" })
-        return;
-    }
-    
-
     if (!session) {
         // Not Signed in
         res.status(401).json({ error: "You must be signed in to do that" });
         return;
     }
 
-    const projectExists = await sql`SELECT * FROM projects WHERE slug = ${slug} AND user_id = ${userID}`
+    let userID: any = -1
+
+    try {
+        userID = await sql`SELECT id FROM users WHERE external_id = ${externalID}`
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: "Internal server error. Can not get user" })
+        return;
+    }
+
+    userID = userID[0].id
+
+    let projectExists;
+    
+    try {
+        projectExists = await sql`SELECT * FROM projects WHERE slug = ${slug} AND user_id = ${userID}`
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({ error: "Internal server error. Can not get project" })
+        return;
+    }
 
     if (projectExists.length === 0) {
         res.status(404).json({ error: "Project not found" });
@@ -60,7 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         response = await sql`DELETE FROM projects WHERE slug = ${slug} AND user_id = ${userID}`
     } catch (error) {
         console.log(error)
-        res.status(500).json({ error: "Internal server error" })
+        res.status(500).json({ error: "Internal server error. Was not able to delete project" })
         return;
     }
 
