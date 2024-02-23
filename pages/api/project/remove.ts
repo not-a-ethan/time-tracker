@@ -25,8 +25,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(418).json({ error: "Wrong method. Remember I am a Tea Pot" });
     }
 
-    const slug = body["slug"]
-
     const session: any = await getServerSession(req, res, authOptions)
     const externalID = session.token.sub
 
@@ -46,6 +44,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     userID = userID[0].id
+
+    const slug = body["slug"]
+
+    if (!slug || slug === "") {
+        res.status(400).json({ error: "No slug provided or is empty" })
+        return;
+    }
 
     let projectExists;
     

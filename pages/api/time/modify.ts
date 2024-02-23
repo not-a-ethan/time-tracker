@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const session: any = await getServerSession(req, res, authOptions)
-    let userID = -1;
+    const externalID = session.token.sub
 
     if (!session) {
         // Not Signed in
@@ -35,10 +35,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
+    let userID = -1;
+
     try {
-        const user = await sql`SELECT * FROM users WHERE external_id = ${session.token.sub}`;
+        const user = await sql`SELECT * FROM users WHERE external_id = ${externalID}`;
         userID = user[0].id;
     } catch (e) {
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
+    }
+
+    if (userID === -1) {
         res.status(500).json({ error: "Internal Server Error" });
         return;
     }

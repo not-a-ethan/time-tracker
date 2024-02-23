@@ -35,8 +35,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    if (typeof body["id"] !== "number") {
+    const entryID = Number(body["id"])
+
+    if (typeof entryID !== "number") {
         res.status(400).json({ error: "id must be a number" });
+        return;
+    } else if (entryID < 1) {
+        res.status(400).json({ error: "id must be a positive number" });
+        return;
+    } else if (entryID % 1 !== 0) {
+        res.status(400).json({ error: "id must be an integer" });
         return;
     }
 
@@ -46,6 +54,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const result = await sql`SELECT id FROM users WHERE external_id = ${externalID}`
         userID = result[0].id;
     } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+        return;
+    }
+
+    if (userID === -1) {
         res.status(500).json({ error: "Internal server error" });
         return;
     }

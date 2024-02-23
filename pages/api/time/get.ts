@@ -28,13 +28,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const session: any = await getServerSession(req, res, authOptions)
     const externalID = session.token.sub
-    let userID = -1;
 
     if (!session) {
         // Not Signed in
         res.status(401).json({ error: "You must be signed in to do that" });
         return;
     }
+
+    let userID = -1;
 
     try {
         const user = await sql`SELECT * FROM users WHERE external_id = ${externalID}`;

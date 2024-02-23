@@ -35,17 +35,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    const slug = body["newProject"].replace(/ /g, "-").toLowerCase();
-
-    const projectExists = await sql`SELECT * FROM projects WHERE slug = ${slug} AND user_id = (SELECT id FROM users WHERE external_id = ${externalID})`
-
-    if (projectExists.length > 0) {
-        res.status(409).json({ error: "Project already exists" });
-        return;
-    }
-    
-    let response;
-
     let userID = -1 
     
     try {
@@ -61,11 +50,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
+    const slug = body["newProject"].replace(/ /g, "-").toLowerCase();
+
     if (slug === "") {
         res.status(400).json({ error: "Project name cannot be empty" });
         return;
     }
+
+    let projectExists;
+
+    try {
+        projectExists = await sql`SELECT * FROM projects WHERE slug = ${slug} AND user_id = ${userID}`
+    } catch (e) {
+        res.status(500).json({ error: "Internal server error. Can not get project" })
+        return;
+    }
+
+    if (projectExists.length > 0) {
+        res.status(409).json({ error: "Project already exists" });
+        return;
+    }
     
+    let response;
+
     try {
         response = await sql`
             INSERT INTO projects (user_id, project_name, slug)
