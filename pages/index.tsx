@@ -10,10 +10,9 @@ import { useSession, getSession } from "next-auth/react"
 
 import styles from '../styles/Home.module.css'
 
-import { main } from '../lib/javascript/getProjects'
+import { getProjects } from '../lib/javascript/getProjects'
 
 function Index() {
-    const [projects, setProjects] = useState([]);
     const router = useRouter();
 
     const { data: session, status } = useSession()
@@ -32,7 +31,16 @@ function Index() {
     }, []);
 
     useEffect(() => {
-        main();
+        const observer = new MutationObserver(() => {
+            const projectList = document.getElementById("projectList");
+            if (projectList) {
+                getProjects();
+                observer.disconnect();
+            }
+        });
+    
+        observer.observe(document.body, { childList: true, subtree: true });
+        return () => observer.disconnect();
     }, []);
 
     if (status === "loading") {
