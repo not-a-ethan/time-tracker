@@ -70,7 +70,7 @@ function Index() {
                 </div>
 
                 <div>
-                    {/*A form to make a new project*/}
+                    {/*A form to delete a project*/}
 
                     <iframe name="dummyframe2" id="dummyframe" className={styles.iframe}></iframe>
 
@@ -81,7 +81,7 @@ function Index() {
                 </div>
 
                 <div>
-                    {/*A form to make a new project*/}
+                    {/*A form to make a new time entry*/}
 
                     <iframe name="dummyframe3" id="dummyframe" className={styles.iframe}></iframe>
 
