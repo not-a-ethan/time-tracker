@@ -46,18 +46,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     let response;
 
-    if (body["type"] === "total") {
+    if (query["type"] === "total") {
         try {
             response = await sql`SELECT * FROM timeentries WHERE user_id = ${userID}`;
         } catch (e) {
             res.status(500).json({ error: "Internal Server Error" });
             return;
         }
-    } else if (body["type"] === "project") {
+    } else if (query["type"] === "project") {
         let projectExists;
 
         try {
-            projectExists = await sql`SELECT * FROM projects WHERE id = ${body["project_id"]}`;
+            projectExists = await sql`SELECT * FROM projects WHERE id = ${query["project_id"]}`;
         } catch (e) {
             res.status(500).json({ error: "Internal Server Error" });
             return;
@@ -70,28 +70,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         try {
-            response = await sql`SELECT * FROM timeentries WHERE user_id = ${userID} AND project_id = ${body["project_id"]}`;
+            response = await sql`SELECT * FROM timeentries WHERE user_id = ${userID} AND project_id = ${query["project_id"]}`;
         } catch (e) {
             res.status(500).json({ error: "Internal Server Error" });
             return;
         }
-    } else if (body["type"] === "dataExact") {
+    } else if (query["type"] === "dataExact") {
         try {
-            response = await sql`SELECT * FROM timeentries WHERE user_id = ${userID} AND DATE(time_added) = ${body["date"]}`;
+            response = await sql`SELECT * FROM timeentries WHERE user_id = ${userID} AND DATE(time_added) = ${query["date"]}`;
         } catch (e) {
             res.status(500).json({ error: "Internal Server Error" });
             return;
         }
-    } else if (body["type"] === "dateRange") {
+    } else if (query["type"] === "dateRange") {
         try {
-            response = await sql`SELECT * FROM time WHERE user_id = ${userID} AND DATE(time_added) >= ${body["start"]} AND DATE(time_added) <= ${body["end"]}`;
+            response = await sql`SELECT * FROM time WHERE user_id = ${userID} AND DATE(time_added) >= ${query["start"]} AND DATE(time_added) <= ${query["end"]}`;
         } catch (e) {
             res.status(500).json({ error: "Internal Server Error" });
             return;
         }
-    } else if (body["type"] === "id") {
+    } else if (query["type"] === "id") {
         try {
-            response = await sql`SELECT * FROM timeentries WHERE user_id = ${userID} AND id = ${body["id"]}`;
+            response = await sql`SELECT * FROM timeentries WHERE user_id = ${userID} AND id = ${query["id"]}`;
         } catch (e) {
             res.status(500).json({ error: "Internal Server Error" });
             return;

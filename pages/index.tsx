@@ -11,6 +11,7 @@ import { useSession, getSession } from "next-auth/react"
 import styles from '../styles/Home.module.css'
 
 import { getProjects } from '../lib/javascript/getProjects'
+import { getTimeData } from '../lib/javascript/getTimeData'
 
 function Index() {
     const router = useRouter();
@@ -22,6 +23,19 @@ function Index() {
             const projectList = document.getElementById("projectList");
             if (projectList) {
                 getProjects();
+                observer.disconnect();
+            }
+        });
+    
+        observer.observe(document.body, { childList: true, subtree: true });
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        const observer = new MutationObserver(() => {
+            const timeElement = document.getElementById("totalTime");
+            if (timeElement) {
+                getTimeData();
                 observer.disconnect();
             }
         });
@@ -90,6 +104,10 @@ function Index() {
                         <input type="number" name="time_seconds" placeholder="Num of seconds" />
                         <input type="submit" value="Delete Project" />
                     </form>
+                </div>
+
+                <div>
+                    <p>Total time tracked: <span id="totalTime"></span></p>
                 </div>
             </main>
         </div>
