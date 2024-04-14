@@ -1,16 +1,12 @@
-html,
+:root {
+  --primary-color-dark: #1A545B;
+  --secondary-color-dark: #87CEFA;
+  --trinary-color-dark: #3C8C98;
+  --primary-background-color-dark: #031926;
+  --secondary-background-color-dark: #0E2F40;
+  --trinary-background-color-dark: #384E5B;
+}
+
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
+  background-color: var(--primary-background-color-dark);
 }

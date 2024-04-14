@@ -1,0 +1,16 @@
+.button {
+    color: var(--secondary-color-dark);
+    background: var(--secondary-background-color-dark);
+
+    border: none;
+    border-radius: 5px;
+
+    transition-property: background;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+}
+
+.button:hover {
+    background: var(--trinary-background-color-dark);
+    color: var(--trinary-color-dark);
+}

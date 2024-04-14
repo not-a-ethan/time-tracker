@@ -13,6 +13,8 @@ import styles from '../styles/Home.module.css'
 import { getProjects } from '../lib/javascript/getProjects'
 import { getTimeData } from '../lib/javascript/getTimeData'
 
+import Button from '../lib/components/button'
+
 function Index() {
     const router = useRouter();
 
@@ -54,15 +56,15 @@ function Index() {
     }
 
     return (
-        <div className={styles.container}>
+        <div>
             <Head>
                 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <title>Homework time tracker</title>
             </Head>
 
-            <main className={styles.main}>
-                <h1>Time Tracker</h1>
+            <main>
+                <h1 className={styles.header}>Time Tracker</h1>
                 
 
                 <div>
@@ -70,9 +72,9 @@ function Index() {
 
                     <iframe name="dummyframe" id="dummyframe" className={styles.iframe}></iframe>
 
-                    <form method="POST" action="/api/project/new" target="dummyframe">
-                        <input type="text" name="newProject" placeholder="New Project" />
-                        <input type="submit" value="Create Project" />
+                    <form method="POST" action="/api/project/new" target="dummyframe" className={styles.form}>
+                        <input type="text" name="newProject" placeholder="New Project" className={styles["form-input"]} />
+                        <Button text="Create Project" type="submit" className={styles["form-submit"]} height="2.5vh" />
                     </form>
                 </div>
 
@@ -88,21 +90,25 @@ function Index() {
 
                     <iframe name="dummyframe2" id="dummyframe" className={styles.iframe}></iframe>
 
-                    <form method="POST" action="/api/project/remove" target="dummyframe2">
-                        <input type="text" name="slug" placeholder="Project name" />
-                        <input type="submit" value="Delete Project" />
+                    <form method="POST" action="/api/project/remove" target="dummyframe2" className={styles.form}>
+                        <input type="text" name="slug" placeholder="Project name" className={styles["form-input"]} />
+                        <Button text="Delete Project" type="submit" className={styles["form-submit"]} height="2.5vh" />
                     </form>
                 </div>
+
+                <br />
 
                 <div>
                     {/*A form to make a new time entry*/}
 
                     <iframe name="dummyframe3" id="dummyframe" className={styles.iframe}></iframe>
 
-                    <form method="POST" action="/api/time/addEntry" target="dummyframe3">
-                        <input type="text" name="slug" placeholder="Project name" />
-                        <input type="number" name="time_seconds" placeholder="Num of seconds" />
-                        <input type="submit" value="Delete Project" />
+                    <form method="POST" action="/api/time/addEntry" target="dummyframe3" className={styles.form}>
+                        <div className={`${styles["form-input"]} ${styles.form}`}>
+                            <input type="text" name="slug" placeholder="Project name" className={styles["form-input"]} />
+                         <input type="number" name="time_seconds" placeholder="Num of seconds" className={styles["form-submit"]} />
+                        </div>
+                        <Button text="Add Time" type="submit" className={styles["form-submit"]} height="2.5vh" />
                     </form>
                 </div>
 
