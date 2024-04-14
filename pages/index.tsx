@@ -104,9 +104,9 @@ function Index() {
                     <iframe name="dummyframe3" id="dummyframe" className={styles.iframe}></iframe>
 
                     <form method="POST" action="/api/time/addEntry" target="dummyframe3" className={styles.form}>
-                        <div className={`${styles["form-input"]} ${styles.form}`}>
-                            <input type="text" name="slug" placeholder="Project name" className={styles["form-input"]} />
-                         <input type="number" name="time_seconds" placeholder="Num of seconds" className={styles["form-submit"]} />
+                        <div className={`${styles["form-input"]}`}>
+                            <input type="text" name="slug" placeholder="Project name" />
+                            <input type="number" name="time_seconds" placeholder="Num of seconds" />
                         </div>
                         <Button text="Add Time" type="submit" className={styles["form-submit"]} height="2.5vh" />
                     </form>
