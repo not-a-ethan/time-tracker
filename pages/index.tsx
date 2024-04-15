@@ -105,10 +105,13 @@ function Index() {
 
                     <form method="POST" action="/api/time/addEntry" target="dummyframe3" className={styles.form}>
                         <div className={`${styles["form-input"]}`}>
-                            <input type="text" name="slug" placeholder="Project name" />
-                            <input type="number" name="time_seconds" placeholder="Num of seconds" />
+                            <input type="text" name="slug" placeholder="Project name" style={{width: "5vw"}} />
+
+                            <br />
+
+                            <input type="number" name="time_seconds" placeholder="Num of seconds" style={{width: "5vw"}} />
                         </div>
-                        <Button text="Add Time" type="submit" className={styles["form-submit"]} height="2.5vh" />
+                        <Button text="Add Time" type="submit" className={styles["form-submit"]} height="2.5vh" style={{display: 'block', margin: 'auto 0'}} />
                     </form>
                 </div>
 
