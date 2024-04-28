@@ -9,12 +9,9 @@ export async function getTimeData() {
     let totalTime = 0;
 
     const responseJSON = await response.json();
-
-    console.log(responseJSON)
     
     for (let i = 0; i < responseJSON["response"].length; i++) {
         const timeEntry = responseJSON["response"][i];
-        console.log(timeEntry)
         
         totalTime += timeEntry.time_seconds;
     }
