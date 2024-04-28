@@ -74,8 +74,9 @@ function Index() {
                     <iframe name="dummyframe" id="dummyframe" className={styles.iframe}></iframe>
 
                     <form method="POST" action="/api/project/new" target="dummyframe" className={styles.form}>
-                        <input type="text" name="newProject" placeholder="New Project" className={styles["form-input"]} />
-                        <Button text="Create Project" type="submit" className={styles["form-submit"]} height="2.5vh" />
+                        <ShortTextInput text="Project name" height="2.5vh" className={styles["form-input"]} />
+
+                        <Button text="Create Project" type="submit" name="newProject" className={styles["form-submit"]} height="2.5vh" />
                     </form>
                 </div>
 
@@ -92,7 +93,8 @@ function Index() {
                     <iframe name="dummyframe2" id="dummyframe" className={styles.iframe}></iframe>
 
                     <form method="POST" action="/api/project/remove" target="dummyframe2" className={styles.form}>
-                        <input type="text" name="slug" placeholder="Project name" className={styles["form-input"]} />
+                        <ShortTextInput text="Project name" name="slug" height="2.5vh" className={styles["form-input"]} />
+
                         <Button text="Delete Project" type="submit" className={styles["form-submit"]} height="2.5vh" />
                     </form>
                 </div>
@@ -106,11 +108,11 @@ function Index() {
 
                     <form method="POST" action="/api/time/addEntry" target="dummyframe3" className={styles.form}>
                         <div className={`${styles["form-input"]}`}>
-                            <input type="text" name="slug" placeholder="Project name" style={{width: "5vw"}} />
+                            <ShortTextInput text="Project name" name="slug" height="2.5vh" style={{width: "5vw"}} />
 
                             <br />
 
-                            <input type="number" name="time_seconds" placeholder="Num of seconds" style={{width: "5vw"}} />
+                            <ShortTextInput text="Description" name="description" height="2.5vh" style={{width: "5vw"}} />
                         </div>
                         <Button text="Add Time" type="submit" className={styles["form-submit"]} height="2.5vh" style={{display: 'block', margin: 'auto 0'}} />
                     </form>

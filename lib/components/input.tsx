@@ -2,10 +2,13 @@ import styles from "../../styles/input.module.css";
 
 function ShortTextInput(props: any) {
     const text = props.text;
+    const slug = props.slug;
+
     const height = props.height;
+    const width = props.width;
 
     return (
-        <input type="text" name={text} placeholder={text} style={{height: height}} className={styles["short-input"]} />
+        <input type="text" name={slug} placeholder={text} style={{height: height, width: width}} className={styles["short-input"]} />
     );
 }
 
