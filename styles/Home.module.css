@@ -1,3 +1,34 @@
+.main {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 33% 33% 24%;
+  gap: 2.25%;
+
+  margin-left: 2.25%;
+  margin-right: 2.25%;
+}
+
+.rowOne {
+  grid-row: 1;
+}
+
+.rowTwo {
+  grid-row: 2;
+}
+
+.columnOne {
+  grid-column: 1;
+}
+
+.columnTwo {
+  grid-column: 2;
+}
+
+.columnThree {
+  grid-column: 3;
+}
+
 .header {
   color: var(--primary-color-dark);
   font-family: Inter;
@@ -5,6 +36,8 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+
+  text-align: center;
 }
 
 .iframe {
@@ -26,4 +59,12 @@
 .form-submit {
   grid-column: 2;
   width: 5vw;
+}
+
+.projectList {
+  color: var(--primary-color-dark)
+}
+
+.timeTracked {
+  color: var(--primary-color-dark)
 }

@@ -64,11 +64,11 @@ function Index() {
                 <title>Homework time tracker</title>
             </Head>
 
-            <main>
-                <h1 className={styles.header}>Time Tracker</h1>
-                
+            <h1 className={styles.header}>Time Tracker</h1>
 
-                <div>
+            <main className={styles.main}>
+
+                <div className={`${styles.rowOne} ${styles.columnOne}`}>
                     {/*A form to make a new project*/}
 
                     <iframe name="dummyframe" id="dummyframe" className={styles.iframe}></iframe>
@@ -80,14 +80,14 @@ function Index() {
                     </form>
                 </div>
 
-                <div>
+                <div className={`${styles.columnThree}`}>
                     {/*A list of projects*/}
-                    <ul id="projectList">
+                    <ul id="projectList" className={styles.projectList}>
                     
                     </ul>
                 </div>
 
-                <div>
+                <div className={`${styles.rowOne} ${styles.columnTwo}`}>
                     {/*A form to delete a project*/}
 
                     <iframe name="dummyframe2" id="dummyframe" className={styles.iframe}></iframe>
@@ -101,7 +101,7 @@ function Index() {
 
                 <br />
 
-                <div>
+                <div className={`${styles.rowTwo} ${styles.columnOne}`}>
                     {/*A form to make a new time entry*/}
 
                     <iframe name="dummyframe3" id="dummyframe" className={styles.iframe}></iframe>
@@ -118,11 +118,9 @@ function Index() {
                     </form>
                 </div>
 
-                <div>
-                    <p>Total time tracked: <span id="totalTime"></span></p>
+                <div className={`${styles.rowTwo} ${styles.columnTwo}`}>
+                    <p className={styles.timeTracked}>Total time tracked: <span id="totalTime"></span></p>
                 </div>
-
-                <ShortTextInput text="Project name" height="2.5vh" />
             </main>
         </div>
     )
