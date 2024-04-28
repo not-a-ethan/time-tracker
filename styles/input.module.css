@@ -1,0 +1,12 @@
+.short-input {
+    width: 5vw;
+    background: transparent;
+
+    border-color: var(--primary-color-dark);
+    border-radius: 5px;
+    border-width: 2.5px;
+    border-style: solid;
+
+    color: var(--primary-color-dark);
+    text-align: center;
+}

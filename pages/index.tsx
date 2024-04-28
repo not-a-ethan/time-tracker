@@ -13,7 +13,8 @@ import styles from '../styles/Home.module.css'
 import { getProjects } from '../lib/javascript/getProjects'
 import { getTimeData } from '../lib/javascript/getTimeData'
 
-import Button from '../lib/components/button'
+import  Button  from '../lib/components/button'
+import  ShortTextInput  from '../lib/components/input'
 
 function Index() {
     const router = useRouter();
@@ -118,6 +119,8 @@ function Index() {
                 <div>
                     <p>Total time tracked: <span id="totalTime"></span></p>
                 </div>
+
+                <ShortTextInput text="Project name" height="2.5vh" />
             </main>
         </div>
     )
