@@ -1,14 +1,26 @@
 import styles from "../../styles/input.module.css";
 
-function ShortTextInput(props: any) {
-    const text = props.text;
-    const slug = props.slug;
+interface ShortTextInputProps {
+    text: string;
+    height: string;
+    width: string;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
+    value: string;
+}
 
-    const height = props.height;
-    const width = props.width;
-
+function ShortTextInput({ text, height, width, onChange, onBlur, value }: ShortTextInputProps) {
     return (
-        <input type="text" name={slug} placeholder={text} style={{height: height, width: width}} className={styles["short-input"]} />
+        <input 
+        type="text" 
+        name={text} 
+        placeholder={text} 
+        style={{height: height, width: width}} 
+        className={styles["short-input"]} 
+        onChange={onChange}
+        onBlur={onBlur}
+        value={value}
+        />
     );
 }
 

@@ -1,12 +1,12 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Script from 'next/script'
+import { useSession, getSession } from "next-auth/react"
+
 
 import { useEffect, useState } from 'react';
-
 import { useRouter } from 'next/router'
-
-import { useSession, getSession } from "next-auth/react"
+import { useForm, Controller } from 'react-hook-form';
 
 import styles from '../styles/Home.module.css'
 
@@ -18,6 +18,20 @@ import  ShortTextInput  from '../lib/components/input'
 
 function Index() {
     const router = useRouter();
+    const { handleSubmit, control } = useForm();
+
+    const createOnSubmitHandler = (endpoint: string) => (data: any) => {
+        fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => data)
+        .catch((error) => console.error('Error:', error));
+    }
 
     const { data: session, status } = useSession()
 
@@ -73,8 +87,19 @@ function Index() {
 
                     <iframe name="dummyframe" id="dummyframe" className={styles.iframe}></iframe>
 
-                    <form method="POST" action="/api/project/new" target="dummyframe" className={styles.form}>
-                        <ShortTextInput text="Project name" height="2.5vh" className={styles["form-input"]} />
+                    <form target="dummyframe" className={styles.form} onSubmit={handleSubmit(createOnSubmitHandler('/api/project/new'))}>
+                        <Controller
+                            name="newProject"
+                            control={control}
+                            render={({ field }) => (
+                                <ShortTextInput 
+                                    text="Project name" 
+                                    height="2.5vh"
+                                    width="5vw"
+                                    {...field} 
+                                />
+                            )}
+                        />
 
                         <Button text="Create Project" type="submit" name="newProject" className={styles["form-submit"]} height="2.5vh" />
                     </form>
@@ -92,8 +117,19 @@ function Index() {
 
                     <iframe name="dummyframe2" id="dummyframe" className={styles.iframe}></iframe>
 
-                    <form method="POST" action="/api/project/remove" target="dummyframe2" className={styles.form}>
-                        <ShortTextInput text="Project name" name="slug" height="2.5vh" className={styles["form-input"]} />
+                    <form target="dummyframe2" className={styles.form} onSubmit={handleSubmit(createOnSubmitHandler('/api/project/remove'))}>
+                        <Controller
+                            name="slug"
+                            control={control}
+                            render={({ field }) => (
+                                <ShortTextInput 
+                                    text="Project name" 
+                                    height="2.5vh"
+                                    width="5vw"
+                                    {...field} 
+                                />
+                            )}
+                        />
 
                         <Button text="Delete Project" type="submit" className={styles["form-submit"]} height="2.5vh" />
                     </form>
@@ -106,14 +142,37 @@ function Index() {
 
                     <iframe name="dummyframe3" id="dummyframe" className={styles.iframe}></iframe>
 
-                    <form method="POST" action="/api/time/addEntry" target="dummyframe3" className={styles.form}>
+                    <form method="POST" target="dummyframe3" className={styles.form} onSubmit={handleSubmit(createOnSubmitHandler('/api/time/addEntry'))}>
                         <div className={`${styles["form-input"]}`}>
-                            <ShortTextInput text="Project name" name="slug" height="2.5vh" style={{width: "5vw"}} />
+                            <Controller
+                                name="slug"
+                                control={control}
+                                render={({ field }) => (
+                                    <ShortTextInput 
+                                        text="Project name" 
+                                        height="2.5vh"
+                                        width="5vw"
+                                        {...field} 
+                                    />
+                                )}
+                            />
 
                             <br />
 
-                            <ShortTextInput text="Description" name="description" height="2.5vh" style={{width: "5vw"}} />
+                            <Controller
+                            name="time_seconds"
+                            control={control}
+                            render={({ field }) => (
+                                <ShortTextInput 
+                                    text="Time (seconds)" 
+                                    height="2.5vh"
+                                    width="5vw"
+                                    {...field} 
+                                />
+                            )}
+                        />
                         </div>
+
                         <Button text="Add Time" type="submit" className={styles["form-submit"]} height="2.5vh" style={{display: 'block', margin: 'auto 0'}} />
                     </form>
                 </div>
