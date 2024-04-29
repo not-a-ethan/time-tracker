@@ -1,9 +1,12 @@
 import { useSession, signIn, signOut } from "next-auth/react"
+import { useRouter } from 'next/router'
 
 export default function App() {
-
+  const router = useRouter();
+  
    const { data: session } = useSession()
      if (session) {
+      router.push("/")
        return (
          <>
            Signed in as {session.user?.name ?? 'unknow user'} <br />
