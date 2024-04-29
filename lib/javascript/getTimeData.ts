@@ -16,14 +16,15 @@ export async function getTimeData() {
         totalTime += timeEntry.time_seconds;
     }
 
-    const date = new Date();
-    date.setSeconds(totalTime)
-    const formattedTime = date.toISOString().slice(11, 19);
+    const seconds = totalTime % 60;
+    const minutes = Math.floor(totalTime / 60) % 60;
+    const hours = Math.floor(totalTime / 60 / 60) % 24;
+    const days = Math.floor(totalTime / 60 / 60 / 24);
 
     const element = document.getElementById("totalTime");
 
     if (element) {
-        element.innerText = formattedTime.toString();
+        element.innerText = `${days}:${hours}:${minutes}:${seconds}`
     }
 
     return totalTime;
