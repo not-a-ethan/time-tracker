@@ -1,5 +1,5 @@
 export async function getTimeData() {
-    const baseURL = 'https://time-tracker.replit.app'; // replace with your server's base URL
+    const baseURL = window.location.origin;
     const url = new URL('/api/time/get', baseURL);
 
     const response = await fetch(`${url}?type=total`, {
