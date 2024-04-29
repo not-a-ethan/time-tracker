@@ -16,7 +16,7 @@ export async function getTimeData() {
         totalTime += timeEntry.time_seconds;
     }
 
-    const date = new Date(null);
+    const date = new Date();
     date.setSeconds(totalTime)
     const formattedTime = date.toISOString().slice(11, 19);
 
