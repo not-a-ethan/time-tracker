@@ -26,4 +26,10 @@ export async function getProjects() {
     for (let i = 0; i < projectHTML.length; i++) {
         projectList.append(projectHTML[i]);
     }
+
+    if (projectHTML.length === 0) {
+        const noProjects = document.createElement("li");
+        noProjects.innerHTML = "No projects found";
+        projectList.append(noProjects);
+    }
 }
