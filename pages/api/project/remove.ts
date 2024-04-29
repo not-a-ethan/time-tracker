@@ -69,7 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let timeResponse;
 
     try {
-        timeResponse = await sql`DELETE FROM time WHERE project_id = ${projectExists[0].id}`
+        timeResponse = await sql`DELETE FROM timeentries WHERE project_id = ${projectExists[0].id}`
     } catch (error) {
         res.status(500).json({ error: "Internal server error. Was not able to delete time entries" })
         return;
