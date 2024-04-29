@@ -1,5 +1,5 @@
 # Time Tracker
 
-> 🚩 this project is still a Work In Progress and does not work.
+> 🚩 this project is still a Work In Progress and some things may not work.
 
-A time trackers built with Next.js and PostgreSQL.
+The MVP is done but still missing some featuers. See the issues tab for specifics.
