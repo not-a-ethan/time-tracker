@@ -21,9 +21,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const query = req.query;
     const body = req.body;
 
-    console.log(query)
-    console.log(body)
-
     if (method !== "POST") {
         res.status(418).json({ error: "Wrong method. Remember I am a Tea Pot" });
         return;

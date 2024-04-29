@@ -95,7 +95,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         const currentTime = new Date();
-        console.log(body["time_seconds"])
         response = await sql`
         INSERT INTO timeentries (user_id, project_id, entry_name, slug, time_seconds, time_added)
         VALUES 
