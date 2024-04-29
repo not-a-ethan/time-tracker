@@ -1,5 +1,5 @@
 export async function getProjects() {
-    const baseURL = 'http://127.0.0.1:1234/'; // replace with your server's base URL
+    const baseURL = 'time-tracker.replit.app'; // replace with your server's base URL
     const url = new URL('/api/project/list', baseURL);
 
     const response = await fetch(url, {
