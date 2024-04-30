@@ -19,10 +19,9 @@ import  ShortTextInput  from '../lib/components/input'
 function Index() {
     const router = useRouter();
     const { handleSubmit, control } = useForm();
-    const addTimeControler = useForm();
-    const removeProjectControler = useForm();
 
     const createOnSubmitHandler = (endpoint: string) => (data: any) => {
+        console.log(data)
         fetch(endpoint, {
             method: 'POST',
             headers: {
@@ -121,8 +120,8 @@ function Index() {
 
                     <form target="dummyframe2" className={styles.form} onSubmit={handleSubmit(createOnSubmitHandler('/api/project/remove'))}>
                         <Controller
-                            name="slug"
-                            control={addTimeControler.control}
+                            name="deleteSlug"
+                            control={control}
                             render={({ field }) => (
                                 <ShortTextInput 
                                     text="Project name" 
@@ -137,8 +136,6 @@ function Index() {
                     </form>
                 </div>
 
-                <br />
-
                 <div className={`${styles.rowTwo} ${styles.columnOne}`}>
                     {/*A form to make a new time entry*/}
 
@@ -148,7 +145,7 @@ function Index() {
                         <div className={`${styles["form-input"]}`}>
                             <Controller
                                 name="slug"
-                                control={removeProjectControler.control}
+                                control={control}
                                 render={({ field }) => (
                                     <ShortTextInput 
                                         text="Project name" 

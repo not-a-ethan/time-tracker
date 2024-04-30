@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     userID = userID[0].id
 
-    const slug = body["slug"]
+    const slug = body["deleteSlug"]
 
     if (!slug || slug === "") {
         res.status(400).json({ error: "No slug provided or is empty" })

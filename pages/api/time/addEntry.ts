@@ -49,6 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (!slug || slug === "") {
         res.status(400).json({ error: "slug cannot be empty" });
+        console.log(body)
         return;
     }
 
