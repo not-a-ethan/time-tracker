@@ -52,10 +52,45 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    try {
-        response = await sql`SELECT * FROM projects WHERE user_id = ${userID}`
-    } catch (error) {
-        res.status(500).json({ error: "Internal server error" })
+    let id, slug;
+
+    if (query.type === "id") {
+        id = query.id
+        slug = undefined
+        if (!id || id === "") {
+            res.status(400).json({ error: "ID cannot be empty" })
+            return;
+        }
+    } else if (query.type === "slug") {
+        slug = query.slug
+        id = undefined
+        if (!slug || slug === "") {
+            res.status(400).json({ error: "Slug cannot be empty" })
+            return;
+        }
+    } else {
+        res.status(400).json({ error: "Invalid query type" })
+        return;
+    }
+
+    if (id) {
+        try {
+            response = await sql`SELECT * FROM projects WHERE user_id = ${userID} AND id = ${id}`
+        } catch (error) {
+            res.status(500).json({ error: "Internal server error" })
+            return;
+        }
+    } else {
+        try {
+            response = await sql`SELECT * FROM projects WHERE user_id = ${userID} AND slug = ${slug}`
+        } catch (error) {
+            res.status(500).json({ error: "Internal server error" })
+            return;
+        }
+    }
+
+    if (response.length === 0) {
+        res.status(404).json({ error: "Project not found" })
         return;
     }
 
