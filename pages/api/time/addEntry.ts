@@ -98,7 +98,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         response = await sql`
         INSERT INTO timeentries (user_id, project_id, entry_name, slug, time_seconds, time_added)
         VALUES 
-        (${userID},${projectID},${slug},${slug},${body["time_seconds"]},${currentTime})
+        (${userID},${projectID},${body["entryName"]},${slug},${body["time_seconds"]},${currentTime})
         `
     } catch (error) {
         res.status(500).json({ error: "Something went wrong when trying to add it to the DB" });
