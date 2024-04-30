@@ -187,7 +187,9 @@ function Index() {
                         />
                         </div>
 
-                        <Button text="Add Time" type="submit" className={styles["form-submit"]} height="2.5vh" style={{display: 'block', margin: 'auto 0'}} />
+                        <div className={styles["form-submit"]} style={{display: 'block', margin: 'auto 0', marginLeft: "7.5%"}}>
+                            <Button text="Add Time" type="submit"  height="2.5vh" />
+                        </div>
                     </form>
                 </div>
 
