@@ -1,4 +1,6 @@
-import styles from "../../styles/button.module.css";
+'use client'
+
+import styles from "./button.module.css";
 
 function Button(props: any) {
     const text = props.text;

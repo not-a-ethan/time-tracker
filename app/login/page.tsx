@@ -1,5 +1,7 @@
+'use client'
+
 import { useSession, signIn, signOut } from "next-auth/react"
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 export default function App() {
   const router = useRouter();

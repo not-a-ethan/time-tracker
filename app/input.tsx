@@ -1,4 +1,6 @@
-import styles from "../../styles/input.module.css";
+'use client'
+
+import styles from "./input.module.css";
 
 interface ShortTextInputProps {
     text: string;

@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import postgres from "postgres";
 
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "../auth/[...nextauth]"
+import { authOptions } from "../../auth/[...nextauth]/route"
 
 const sql: any = postgres({
     host: process.env.PGHOST,
@@ -49,7 +49,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (!slug || slug === "") {
         res.status(400).json({ error: "slug cannot be empty" });
-        console.log(body)
         return;
     }
 

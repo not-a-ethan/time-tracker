@@ -1,27 +1,34 @@
+'use client'
+
 import type { NextPage } from 'next'
+import { Metadata } from 'next'
 import Head from 'next/head'
 import Script from 'next/script'
 import { useSession, getSession } from "next-auth/react"
 
-
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useForm, Controller } from 'react-hook-form';
 
-import styles from '../styles/Home.module.css'
+import styles from './styles.module.css'
 
 import { getProjects } from '../lib/javascript/getProjects'
 import { getTimeData } from '../lib/javascript/getTimeData'
 
-import  Button  from '../lib/components/button'
-import  ShortTextInput  from '../lib/components/input'
+import  Button  from './button'
+import  ShortTextInput  from './input'
+
+/*
+export const metadata: Metadata = {
+    title: 'Homework time tracker'
+}
+*/
 
 function Index() {
     const router = useRouter();
     const { handleSubmit, control } = useForm();
 
     const createOnSubmitHandler = (endpoint: string) => (data: any) => {
-        console.log(data)
         fetch(endpoint, {
             method: 'POST',
             headers: {
@@ -73,12 +80,6 @@ function Index() {
 
     return (
         <div>
-            <Head>
-                <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                <title>Homework time tracker</title>
-            </Head>
-
             <h1 className={styles.header}>Time Tracker</h1>
 
             <main className={styles.main}>

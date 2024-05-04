@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import postgres from "postgres";
 
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "../auth/[...nextauth]"
+import { authOptions } from "../../../app/auth/[...nextauth]/route"
 
 const sql: any = postgres({
     host: process.env.PGHOST,
