@@ -12,8 +12,8 @@ import { useForm, Controller } from 'react-hook-form';
 
 import styles from './styles.module.css'
 
-import { getProjects } from '../lib/javascript/getProjects'
-import { getTimeData } from '../lib/javascript/getTimeData'
+import { getProjects } from './getProjects'
+import { getTimeData } from './getTimeData'
 
 import  Button  from './button'
 import  ShortTextInput  from './input'
