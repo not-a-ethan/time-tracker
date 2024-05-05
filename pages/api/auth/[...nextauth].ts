@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-
 import NextAuth from "next-auth"
 import GithubProvider from "next-auth/providers/github"
 
@@ -20,7 +19,6 @@ export const authOptions: any = {
             clientSecret: process.env.GITHUB_SECRET!,
         }),
     ],
-    secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
         signIn: async (user: any, account: Account, profile: Profile) => {
             createNewUser(user.account.providerAccountId, user.account.provider, user.profile.login)
@@ -34,6 +32,4 @@ export const authOptions: any = {
     },
 }
 
-const handler = NextAuth(authOptions);
-
-export { handler as GET, handler as POST }
+export default (req: NextApiRequest, res: NextApiResponse) => NextAuth(req, res, authOptions);
