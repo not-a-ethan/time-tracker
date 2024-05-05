@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import NextAuth from "next-auth"
 import GithubProvider from "next-auth/providers/github"
 
-import createNewUser from "./createUser"
+import createNewUser from "../../../lib/javascript/createUser"
 
 interface Profile extends Record<string, unknown> {
     id: string;
