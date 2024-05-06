@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const session: any = await getServerSession(req, res, authOptions)
-    const externalID = session.token.sub
+    const externalID: Number = session.token.sub
 
     if (!session) {
         // Not Signed in
