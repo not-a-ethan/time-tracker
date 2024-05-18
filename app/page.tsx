@@ -91,7 +91,7 @@ function Index() {
 
                     <form target="dummyframe" className={styles.form} onSubmit={handleSubmit(createOnSubmitHandler('/api/project/new'))}>
                         <Controller
-                            name="slug"
+                            name="newProject"
                             control={control}
                             render={({ field }) => (
                                 <ShortTextInput 
