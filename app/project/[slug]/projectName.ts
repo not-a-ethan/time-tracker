@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
 
-export default function getProjectName(props: any) {
+export default function GetProjectName(props: any) {
     const [projectName, setProjectName] = useState('');
     const id = props.id;
 
