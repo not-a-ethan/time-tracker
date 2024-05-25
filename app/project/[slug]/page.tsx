@@ -9,7 +9,7 @@ import { useSession, getSession } from "next-auth/react"
 
 import { useForm, Controller } from 'react-hook-form';
 
-// import styles from '../styles/Home.module.css'
+import styles from './styles.module.css'
 
 import ProjectName from './projectName'
 import TimeEntryName from './entryName'
@@ -31,9 +31,29 @@ function Page({ params }: { params: { slug: string } }) {
             <>
                 <p>The project name is <span className='projectName'><ProjectName id={id} /></span></p>
 
-                <TimeEntryName id={id} type="name" />
-                <TimeEntryName id={id} type="time" />
-                <TimeEntryName id={id} type="dateMade" />
+                <div className={styles.grid}>
+                    <div className={`${styles.timeEntries} ${styles.column1}`}>
+                        <div className={styles.column1}>
+                            <TimeEntryName id={id} type="name" />
+                        </div>
+
+                        <div className={styles.column2}>
+                            <TimeEntryName id={id} type="time" />
+                        </div>
+
+                        <div className={styles.column3}>
+                            <TimeEntryName id={id} type="dateMade" />
+                        </div>
+                    </div>
+
+                    <div className={`${styles.column2} ${styles.timeStuff}`}>
+                        <p>Total Time</p>
+                        <p>Past Year</p>
+                        <p>Past Month</p>
+                        <p>Past Week</p>
+                        <p>Past 24 hours</p>
+                    </div>
+                </div>
             </>
         )
     }

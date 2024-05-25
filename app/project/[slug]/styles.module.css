@@ -1,0 +1,37 @@
+.grid {
+    width: 93vw;
+
+    display: grid;
+    grid-gap: 1vw;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    margin-left: 3.5vw;
+    margin-right: 3.5vw;
+
+    padding: 0;
+}
+
+.column1 {
+    grid-column: 1;
+}
+
+.column2 {
+    grid-column: 2;
+}
+
+.column3 {
+    grid-column: 3;
+}
+
+.timeEntries {
+    display: grid;
+    grid-gap: 1vw;
+    grid-template-columns: 1fr 0.5fr 1fr;
+    max-width: 46vw;
+}
+
+.timeStuff {
+    max-width: 46vw;
+
+    text-align: center;
+}
