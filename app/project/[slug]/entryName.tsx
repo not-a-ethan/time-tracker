@@ -45,7 +45,13 @@ export default function TimeEntryName(props: any) {
                         </ul>
                     );
                 } else if (type === "dateMade") {
-                    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+                    const options: Intl.DateTimeFormatOptions = { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric', 
+                        hour: 'numeric', 
+                        minute: 'numeric' 
+                    };
                     const howToFormat = Intl.DateTimeFormat(undefined, options);
                     setJsxResult(
                         <ul>
