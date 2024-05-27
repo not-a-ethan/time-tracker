@@ -1,23 +1,14 @@
 'use client'
 
-import type { NextPage } from 'next'
-
-import Head from 'next/head'
-import Script from 'next/script'
 import { useRouter } from 'next/navigation'
 
 import { useSession, getSession } from "next-auth/react"
-
-import { useForm, Controller } from 'react-hook-form';
 
 import styles from './styles.module.css'
 
 import ProjectName from './projectName'
 import TimeEntryName from './entryName'
-
-import Button  from '../../button'
-import ShortTextInput  from '../../input'
-import { useEffect } from 'react'
+import PastTime from "./pastTime"
 
 function Page({ params }: { params: { slug: string } }) {
     const router = useRouter();
@@ -64,12 +55,9 @@ function Page({ params }: { params: { slug: string } }) {
                     </div>
 
                     <div className={`${styles.column2} ${styles.timeStuff}`}>
-                        <p className={styles.text}>Total Time</p>
-                        <p className={styles.text}>Past Year</p>
-                        <p className={styles.text}>Past Month</p>
-                        <p className={styles.text}>Past Week</p>
-                        <p className={styles.text}>Past 24 hours</p>
+                        <PastTime id={id} />
                     </div>
+                    
                 </div>
             </>
         )
