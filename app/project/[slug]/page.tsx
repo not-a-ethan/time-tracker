@@ -17,6 +17,7 @@ import TimeEntryName from './entryName'
 
 import Button  from '../../button'
 import ShortTextInput  from '../../input'
+import { useEffect } from 'react'
 
 function Page({ params }: { params: { slug: string } }) {
     const router = useRouter();

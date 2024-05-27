@@ -15,6 +15,11 @@ export default async function TimeEntries(id: number) {
         });
 
         let json = await response.json();
+
+        if (response.status === 500) {
+            return null;
+        }
+
         json = json.response.reverse();
         timeEntries = json;
 

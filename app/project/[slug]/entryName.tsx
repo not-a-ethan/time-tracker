@@ -21,49 +21,53 @@ export default function TimeEntryName(props: any) {
 
     useEffect(() => {
         TimeEntries(id).then(function(result) {
-            if (result.length === 0) {
-                setJsxResult(<div>No entries</div>);
+            if (result === null) {
+                return;
             } else {
-                if (type === "name") {
-                    setJsxResult(
-                        <ul>
-                            {result.map((entry: TimeEntry) => (
-                                <li key={entry.id}>
-                                    {entry.entry_name}
-                                </li>
-                            ))}
-                        </ul>
-                    );
-                } else if (type === "time") {
-                    setJsxResult(
-                        <ul>
-                            {result.map((entry: TimeEntry) => (
-                                <li key={entry.id}>
-                                    {new Date(entry.time_seconds * 1000).toISOString().slice(11, 19)}
-                                </li>
-                            ))}
-                        </ul>
-                    );
-                } else if (type === "dateMade") {
-                    const options: Intl.DateTimeFormatOptions = { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric', 
-                        hour: 'numeric', 
-                        minute: 'numeric' 
-                    };
-                    const howToFormat = Intl.DateTimeFormat(undefined, options);
-                    setJsxResult(
-                        <ul>
-                            {result.map((entry: TimeEntry) => (
-                                <li key={entry.id}>
-                                    {howToFormat.format(new Date(entry.time_added))}
-                                </li>
-                            ))}
-                        </ul>
-                    );
+                if (result.length === 0) {
+                    setJsxResult(<div>No entries</div>);
                 } else {
-                    setJsxResult(<div>Invalid type</div>);
+                    if (type === "name") {
+                        setJsxResult(
+                            <ul>
+                                {result.map((entry: TimeEntry) => (
+                                    <li key={entry.id}>
+                                        {entry.entry_name}
+                                    </li>
+                                ))}
+                            </ul>
+                        );
+                    } else if (type === "time") {
+                        setJsxResult(
+                            <ul>
+                                {result.map((entry: TimeEntry) => (
+                                    <li key={entry.id}>
+                                        {new Date(entry.time_seconds * 1000).toISOString().slice(11, 19)}
+                                    </li>
+                                ))}
+                            </ul>
+                        );
+                    } else if (type === "dateMade") {
+                        const options: Intl.DateTimeFormatOptions = { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric', 
+                            hour: 'numeric', 
+                            minute: 'numeric' 
+                        };
+                        const howToFormat = Intl.DateTimeFormat(undefined, options);
+                        setJsxResult(
+                            <ul>
+                                {result.map((entry: TimeEntry) => (
+                                    <li key={entry.id}>
+                                        {howToFormat.format(new Date(entry.time_added))}
+                                    </li>
+                                ))}
+                            </ul>
+                        );
+                    } else {
+                        setJsxResult(<div>Invalid type</div>);
+                    }
                 }
             }
         });
