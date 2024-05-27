@@ -31,7 +31,7 @@ export default function TimeEntryName(props: any) {
                 } else {
                     if (type === "name") {
                         setJsxResult(
-                            <ul>
+                            <ul className={styles.list}>
                                 {result.map((entry: TimeEntry) => (
                                     <li key={entry.id} className={`${styles.text} ${styles.listItem}`}>
                                         {entry.entry_name}
@@ -41,7 +41,7 @@ export default function TimeEntryName(props: any) {
                         );
                     } else if (type === "time") {
                         setJsxResult(
-                            <ul>
+                            <ul className={styles.list}>
                                 {result.map((entry: TimeEntry) => (
                                     <li key={entry.id} className={`${styles.text} ${styles.listItem}`}>
                                         {new Date(entry.time_seconds * 1000).toISOString().slice(11, 19)}
@@ -59,7 +59,7 @@ export default function TimeEntryName(props: any) {
                         };
                         const howToFormat = Intl.DateTimeFormat(undefined, options);
                         setJsxResult(
-                            <ul>
+                            <ul className={styles.list}>
                                 {result.map((entry: TimeEntry) => (
                                     <li key={entry.id} className={`${styles.text} ${styles.listItem}`}>
                                         {howToFormat.format(new Date(entry.time_added))}

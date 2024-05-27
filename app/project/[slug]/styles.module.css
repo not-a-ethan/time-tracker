@@ -38,7 +38,7 @@
 .timeEntries {
     display: grid;
     grid-gap: 1vw;
-    grid-template-columns: 1fr 0.05fr 0.75fr 0.05fr 1fr;
+    grid-template-columns: 1.1750fr 0.025fr 0.3fr 0.025fr 1.18fr;
     max-width: 46vw;
 }
 
