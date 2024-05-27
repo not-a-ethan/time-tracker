@@ -1,0 +1,7 @@
+.text {
+    color: var(--primary-color-dark)
+}
+
+.listItem {
+    list-style-type: none;
+}

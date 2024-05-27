@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 
 import TimeEntries from './getTimeEntries'
 
+import styles from "./entries.module.css"
+
 export default function TimeEntryName(props: any) {
     const id = Number(props.id);
     const type = props.type;
@@ -31,7 +33,7 @@ export default function TimeEntryName(props: any) {
                         setJsxResult(
                             <ul>
                                 {result.map((entry: TimeEntry) => (
-                                    <li key={entry.id}>
+                                    <li key={entry.id} className={`${styles.text} ${styles.listItem}`}>
                                         {entry.entry_name}
                                     </li>
                                 ))}
@@ -41,7 +43,7 @@ export default function TimeEntryName(props: any) {
                         setJsxResult(
                             <ul>
                                 {result.map((entry: TimeEntry) => (
-                                    <li key={entry.id}>
+                                    <li key={entry.id} className={`${styles.text} ${styles.listItem}`}>
                                         {new Date(entry.time_seconds * 1000).toISOString().slice(11, 19)}
                                     </li>
                                 ))}
@@ -59,7 +61,7 @@ export default function TimeEntryName(props: any) {
                         setJsxResult(
                             <ul>
                                 {result.map((entry: TimeEntry) => (
-                                    <li key={entry.id}>
+                                    <li key={entry.id} className={`${styles.text} ${styles.listItem}`}>
                                         {howToFormat.format(new Date(entry.time_added))}
                                     </li>
                                 ))}

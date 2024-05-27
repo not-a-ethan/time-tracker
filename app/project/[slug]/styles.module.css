@@ -1,3 +1,7 @@
+.text {
+    color: var(--primary-color-dark)
+}
+
 .grid {
     width: 93vw;
 
@@ -23,11 +27,23 @@
     grid-column: 3;
 }
 
+.column4 {
+    grid-column: 4;
+}
+
+.column5 {
+    grid-column: 5;
+}
+
 .timeEntries {
     display: grid;
     grid-gap: 1vw;
-    grid-template-columns: 1fr 0.5fr 1fr;
+    grid-template-columns: 1fr 0.05fr 0.75fr 0.05fr 1fr;
     max-width: 46vw;
+}
+
+.dividers {
+    border-right: 1px solid #ccc;
 }
 
 .timeStuff {

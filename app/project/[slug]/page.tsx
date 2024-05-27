@@ -46,25 +46,29 @@ function Page({ params }: { params: { slug: string } }) {
 
                 <div className={styles.grid}>
                     <div className={`${styles.timeEntries} ${styles.column1}`}>
-                        <div className={styles.column1}>
+                        <div className={`${styles.column1} ${styles.entries}`}>
                             <TimeEntryName id={id} type="name" />
                         </div>
 
-                        <div className={styles.column2}>
+                        <div className={`${styles.column2} ${styles.dividers}`}></div>
+
+                        <div className={styles.column3}>
                             <TimeEntryName id={id} type="time" />
                         </div>
 
-                        <div className={styles.column3}>
+                        <div className={`${styles.column4} ${styles.dividers}`}></div>
+
+                        <div className={styles.column5}>
                             <TimeEntryName id={id} type="dateMade" />
                         </div>
                     </div>
 
                     <div className={`${styles.column2} ${styles.timeStuff}`}>
-                        <p>Total Time</p>
-                        <p>Past Year</p>
-                        <p>Past Month</p>
-                        <p>Past Week</p>
-                        <p>Past 24 hours</p>
+                        <p className={styles.text}>Total Time</p>
+                        <p className={styles.text}>Past Year</p>
+                        <p className={styles.text}>Past Month</p>
+                        <p className={styles.text}>Past Week</p>
+                        <p className={styles.text}>Past 24 hours</p>
                     </div>
                 </div>
             </>
