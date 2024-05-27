@@ -4,6 +4,7 @@ import type { NextPage } from 'next'
 
 import Head from 'next/head'
 import Script from 'next/script'
+import { useRouter } from 'next/navigation'
 
 import { useSession, getSession } from "next-auth/react"
 
@@ -18,9 +19,20 @@ import Button  from '../../button'
 import ShortTextInput  from '../../input'
 
 function Page({ params }: { params: { slug: string } }) {
+    const router = useRouter();
+    const { data: session, status } = useSession()
     const id = Number(params.slug);
 
     const renderContent = () => {
+        if (status === "loading") {
+            return (<p>Loading...</p>)
+        }
+    
+        if (status === "unauthenticated") {
+            router.push("/login")
+            return (<p>Access Denied</p>)
+        }
+
         if (isNaN(id)) {
             return (
                 <p>The slug is not a number</p>
