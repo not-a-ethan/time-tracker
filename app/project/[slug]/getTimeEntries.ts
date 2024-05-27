@@ -6,7 +6,7 @@ import { time } from 'console';
 export default async function TimeEntries(id: number) {
     let timeEntries;
 
-    let currentData = sessionStorage.getItem('timeEntries');
+    let currentData = sessionStorage.getItem(`${id}-timeEntries`);
     if (!currentData || currentData === 'undefined' || currentData === 'null') {
         const url = `/api/time/get?type=project&project_id=${id}`;
 
@@ -23,7 +23,7 @@ export default async function TimeEntries(id: number) {
         json = json.response.reverse();
         timeEntries = json;
 
-        sessionStorage.setItem('timeEntries', JSON.stringify(timeEntries));
+        sessionStorage.setItem(`${id}-timeEntries`, JSON.stringify(timeEntries));
     } else {
         currentData = JSON.parse(currentData);
         timeEntries = currentData
