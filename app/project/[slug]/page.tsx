@@ -42,7 +42,7 @@ function Page({ params }: { params: { slug: string } }) {
 
         return (
             <>
-                <p>The project name is <span className='projectName'><ProjectName id={id} /></span></p>
+                <p className={styles.text}>The project name is <span className='projectName'><ProjectName id={id} /></span></p>
 
                 <div className={styles.grid}>
                     <div className={`${styles.timeEntries} ${styles.column1}`}>
