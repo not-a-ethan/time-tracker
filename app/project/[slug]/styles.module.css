@@ -6,11 +6,13 @@
     width: 93vw;
 
     display: grid;
-    grid-gap: 1vw;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 5vw;
 
-    margin-left: 3.5vw;
-    margin-right: 3.5vw;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(auto-fit, minmax(min-content, 1fr));
+
+    margin-left: 5vw;
+    margin-right: 5vw;
 
     padding: 0;
 }
@@ -38,7 +40,7 @@
 .timeEntries {
     display: grid;
     grid-gap: 1vw;
-    grid-template-columns: 1.1750fr 0.025fr 0.3fr 0.025fr 1.18fr;
+    grid-template-columns: [col1] minmax(0, 1fr) [col2] 0.025fr [col3] 0.2fr [col4] 0.025fr [col5] minmax(0, 1fr);
     max-width: 46vw;
 }
 
