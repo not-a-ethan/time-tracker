@@ -12,8 +12,13 @@ export async function getProjects() {
 
     for (let i = 0; i < responseJSON.length; i++) {
         const project = responseJSON[i];
+
+        const link = document.createElement("a")
+        link.textContent = project["project_name"]
+        link.href = `/project/${project["id"]}`
+
         const projectElement = document.createElement("li");
-        projectElement.innerHTML = project.slug;
+        projectElement.appendChild(link)
         projectHTML.push(projectElement);
     }
 
