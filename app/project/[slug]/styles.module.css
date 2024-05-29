@@ -57,3 +57,17 @@
 .trash {
     height: 32px;
 }
+
+.header > * {
+    display: inline;
+    margin-right: 0.5vw;
+}
+
+.button {
+    background: none;
+    border: none;
+}
+
+.iframe {
+    display: none;
+}

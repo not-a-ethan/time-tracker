@@ -4,16 +4,43 @@ import { useRouter } from 'next/navigation'
 
 import { useSession, getSession } from "next-auth/react"
 
-import styles from './styles.module.css'
+import { useForm } from 'react-hook-form';
+
+import Button from "../../button"
 
 import ProjectName from './projectName'
 import TimeEntryName from './entryName'
 import PastTime from "./pastTime"
 
+import styles from './styles.module.css'
+
 function Page({ params }: { params: { slug: string } }) {
     const router = useRouter();
-    const { data: session, status } = useSession()
+    const { handleSubmit } = useForm();
+    const { data: session, status } = useSession();
+
     const id = Number(params.slug);
+
+    const createOnSubmitHandler = (endpoint: string) => (data: any) => {
+        fetch(`/api/project/get?type=id&id=${id}`, {
+            method: "GET",
+        })
+        .then(response => response.json())
+        .catch((error) => console.error(error))
+        .then(data => 
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ deleteSlug: data[0].project_name })
+            })
+            .then(response => response.json())
+            .then(data => data)
+            .catch((error) => console.error('Error:', error))
+        )
+ 
+    }
 
     const renderContent = () => {
         if (status === "loading") {
@@ -33,14 +60,24 @@ function Page({ params }: { params: { slug: string } }) {
 
         return (
             <>
-                <h1 className={styles.text}>
-                    <ProjectName id={id} />
-                    <img 
-                        src="/images/trash.svg" 
-                        alt="Picture of trash can for delete symbol" 
-                        className={styles.trash}
-                    />
-                </h1>
+                <div className={styles.header}>
+                    <h1 className={styles.text}>
+                        <ProjectName id={id} />
+                    </h1>
+
+                    <iframe name="dummyframe2" id="dummyframe" className={styles.iframe}></iframe>
+
+                    <form target="dummyframe2" className={styles.form} onSubmit={handleSubmit(createOnSubmitHandler('/api/project/remove'))} >
+                        <button type="submit" className={styles.button}>
+                            <img 
+                                src="/images/trash.svg" 
+                                alt="Picture of trash can for delete symbol" 
+                                className={styles.trash}
+                            />
+                        </button>
+                        {/*<Button text="Delete Project" type="submit" className={styles["form-submit"]} height="2.5vh" />*/}
+                    </form>
+                </div>
 
                 <div className={styles.grid}>
                     <div className={`${styles.timeEntries} ${styles.column1}`}>
