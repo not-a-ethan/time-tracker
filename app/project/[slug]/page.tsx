@@ -33,7 +33,14 @@ function Page({ params }: { params: { slug: string } }) {
 
         return (
             <>
-                <p className={styles.text}>The project name is <span className='projectName'><ProjectName id={id} /></span></p>
+                <h1 className={styles.text}>
+                    <ProjectName id={id} />
+                    <img 
+                        src="/images/trash.svg" 
+                        alt="Picture of trash can for delete symbol" 
+                        className={styles.trash}
+                    />
+                </h1>
 
                 <div className={styles.grid}>
                     <div className={`${styles.timeEntries} ${styles.column1}`}>
