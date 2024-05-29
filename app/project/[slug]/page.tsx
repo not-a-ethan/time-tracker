@@ -6,11 +6,9 @@ import { useSession, getSession } from "next-auth/react"
 
 import { useForm } from 'react-hook-form';
 
-import Button from "../../button"
-
-import ProjectName from './projectName'
-import TimeEntryName from './entryName'
-import PastTime from "./pastTime"
+import ProjectName from './Javascript/projectName'
+import TimeEntryName from '../components/entryName'
+import PastTime from "../components/pastTime"
 
 import styles from './styles.module.css'
 

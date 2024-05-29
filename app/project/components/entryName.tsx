@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import TimeEntries from './getTimeEntries'
+import TimeEntries from '../[slug]/Javascript/getTimeEntries'
 
-import styles from "./entries.module.css"
+import styles from "./css/entries.module.css"
 
 export default function TimeEntryName(props: any) {
     const id = Number(props.id);

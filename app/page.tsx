@@ -12,11 +12,11 @@ import { useForm, Controller } from 'react-hook-form';
 
 import styles from './styles.module.css'
 
-import { getProjects } from './getProjects'
-import { getTimeData } from './getTimeData'
+import { getProjects } from './Javascript/getProjects'
+import { getTimeData } from './Javascript/getTimeData'
 
-import  Button  from './button'
-import  ShortTextInput  from './input'
+import  Button  from './components/button'
+import  ShortTextInput  from './components/input'
 
 /*
 export const metadata: Metadata = {
