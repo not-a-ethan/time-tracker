@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import TimeEntries from '../[slug]/Javascript/getTimeEntries'
 
-import styles from "./styles.module.css"
+import styles from "../../styles.module.css"
 
 function convertSecondsToDDHHMMSS(seconds: number) {
     const days = Math.floor(seconds / (24 * 60 * 60));

@@ -27,7 +27,7 @@ function Page({ params }: { params: { slug: string } }) {
         .catch((error) => console.error(error))
         .then(data => 
             fetch(endpoint, {
-                method: 'POST',
+                method: 'GET', // Change back to `POST`. Change to GET for now so I dont accidently delete a project
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -38,6 +38,24 @@ function Page({ params }: { params: { slug: string } }) {
             .catch((error) => console.error('Error:', error))
         )
  
+    }
+
+    function confirmationOnLoad() {
+        const element = document.getElementById("trueSubmit")
+
+        if (element !== null) {
+            element.style.display = "none"
+        }
+    }
+    
+    function confirmation() {        
+        const element = document.getElementById("trueSubmit")
+
+        if (element !== null) {
+            console.log(window.getComputedStyle(element, null).getPropertyValue("display"))
+            element.style.display = "inline-block";
+            console.log(window.getComputedStyle(element, null).getPropertyValue("display"))
+        }
     }
 
     const renderContent = () => {
@@ -66,14 +84,17 @@ function Page({ params }: { params: { slug: string } }) {
                     <iframe name="dummyframe2" id="dummyframe" className={styles.iframe}></iframe>
 
                     <form target="dummyframe2" className={styles.form} onSubmit={handleSubmit(createOnSubmitHandler('/api/project/remove'))} >
-                        <button type="submit" className={styles.button}>
+                        <button className={styles.button} id="trueSubmit" onClick={confirmation} type='button' >
                             <img 
                                 src="/images/trash.svg" 
                                 alt="Picture of trash can for delete symbol" 
                                 className={styles.trash}
                             />
                         </button>
-                        {/*<Button text="Delete Project" type="submit" className={styles["form-submit"]} height="2.5vh" />*/}
+
+                        <div className={`trueSubmit`} onLoad={confirmationOnLoad} >
+                            <button type='submit'>Are you sure you want to do this?</button>
+                        </div>
                     </form>
                 </div>
 
