@@ -27,7 +27,7 @@ function Page({ params }: { params: { slug: string } }) {
         .catch((error) => console.error(error))
         .then(data => 
             fetch(endpoint, {
-                method: 'GET', // Change back to `POST`. Change to GET for now so I dont accidently delete a project
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -38,23 +38,15 @@ function Page({ params }: { params: { slug: string } }) {
             .catch((error) => console.error('Error:', error))
         )
  
-    }
-
-    function confirmationOnLoad() {
-        const element = document.getElementById("trueSubmit")
-
-        if (element !== null) {
-            element.style.display = "none"
-        }
+        router.push("/")
+        return;
     }
     
     function confirmation() {        
-        const element = document.getElementById("trueSubmit")
+        const element = document.getElementsByClassName("trueSubmit")
 
         if (element !== null) {
-            console.log(window.getComputedStyle(element, null).getPropertyValue("display"))
-            element.style.display = "inline-block";
-            console.log(window.getComputedStyle(element, null).getPropertyValue("display"))
+            element[0].style.display = "block";
         }
     }
 
@@ -92,7 +84,7 @@ function Page({ params }: { params: { slug: string } }) {
                             />
                         </button>
 
-                        <div className={`trueSubmit`} onLoad={confirmationOnLoad} >
+                        <div className={`trueSubmit ${styles.trueSubmit}`} >
                             <button type='submit'>Are you sure you want to do this?</button>
                         </div>
                     </form>
