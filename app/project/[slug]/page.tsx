@@ -109,7 +109,7 @@ function Page({ params }: { params: { slug: string } }) {
                         </div>
                     </div>
 
-                    <div className={`${styles.column2} ${styles.timeStuff}`}>
+                    <div className={`${styles.column2} ${styles.timeStuff} ${styles.text}`}>
                         <PastTime id={id} />
                     </div>
                     
