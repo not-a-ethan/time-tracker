@@ -20,7 +20,9 @@ export default async function TimeEntries(id: number) {
             return null;
         }
 
-        json = json.response.reverse();
+        console.log(json)
+
+        json = json.reverse();
         timeEntries = json;
 
         sessionStorage.setItem(`${id}-timeEntries`, JSON.stringify(timeEntries));
