@@ -37,6 +37,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     let userID = -1
 
     if (!userExistsVAR) {
+        console.log(userExists)
         return new Response(
             JSON.stringify(
                 { error: "Internal Server Error" }
@@ -60,7 +61,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const projectExists: projectExistsInterface = await doesProjectExists("slug", slug, NaN, userID);
 
-    if (projectExists["exists"]) {
+    if (!projectExists["exists"]) {
         return new Response(
             JSON.stringify(
                 projectExists["json"]
@@ -69,13 +70,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
         )
     }
 
-    const projectInfo: any = getProjectInfo("slug", slug, NaN, userID)
+    const projectInfo: any = await getProjectInfo("slug", slug, NaN, userID)
 
-    let timeResponse;
+    let deleteTimeEntries;
 
     try {
-        timeResponse = await sql`DELETE FROM timeentries WHERE project_id = ${projectInfo[0].id}`
+        deleteTimeEntries = await sql`DELETE FROM timeentries WHERE project_id = ${projectInfo[0].id}`
     } catch (error) {
+        console.log(error)
         return new Response(
             JSON.stringify(
                 { error: "Internal server error. Was not able to delete time entries" }

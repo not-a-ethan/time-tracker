@@ -7,6 +7,7 @@ export async function doesProjectExists(type: string, slug: string, id: Number, 
         try {
             projectExists = await sql`SELECT * FROM projects WHERE slug = ${slug} AND user_id = ${userID}`
         } catch (e) {
+            console.log(e)
             return {
                 exists: true,
                 status: 500,
@@ -31,6 +32,7 @@ export async function doesProjectExists(type: string, slug: string, id: Number, 
         try {
             projectExists = await sql`SELECT * FROM projects WHERE slug = ${slug} AND user_id = ${userID}`
         } catch (e) {
+            console.log(e)
             return {
                 exists: true,
                 status: 500,

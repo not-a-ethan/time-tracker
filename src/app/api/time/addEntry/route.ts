@@ -90,7 +90,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const projectExists: projectExistsInterface = await doesProjectExists("slug", slug, NaN, userID);
 
-    if (projectExists["exists"]) {
+    if (!projectExists["exists"]) {
         return new Response(
             JSON.stringify(
                 projectExists["json"]
