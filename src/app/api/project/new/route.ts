@@ -4,16 +4,25 @@ import { useSearchParams } from 'next/navigation'
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../../../pages/api/auth/[...nextauth]";
 
-import { sql } from "../../postgres"
+import { isAuthenticated } from '../../../../../helpers/isAuthenticated'
+import { userExists } from "../../../../../helpers/userExists";
+import { doesProjectExists } from "../../../../../helpers/projectExists";
+
+import { sql } from "../../../../../utils/postgres"
+
+interface projectExistsInterface {
+    exists: Boolean,
+    status: number,
+    json: Object
+}
 
 export async function POST(req: NextRequest, res: NextResponse) {  
-    const searchParamas = req.nextUrl.searchParams
     const body = await req.json()
 
     const session: any = await getServerSession(authOptions)
     const externalID = session.token.sub
 
-    if (!session) {
+    if (!isAuthenticated) {
         // Not Signed in
         return new Response(
             JSON.stringify(
@@ -23,27 +32,18 @@ export async function POST(req: NextRequest, res: NextResponse) {
         )
     }
 
-    let userID = -1 
-    
-    try {
-        const result = await sql`SELECT id FROM users WHERE external_id = ${externalID}`
-        userID = result[0].id
-    } catch (error) {
+    const userExistsVAR = await userExists(externalID)
+    let userID = -1
+
+    if (!userExistsVAR) {
         return new Response(
             JSON.stringify(
-                { error: "Internal server error" }
+                { error: "Internal Server Error" }
             ),
             { status: 500 }
         )
-    }
-
-    if (userID === -1) {
-        return new Response(
-            JSON.stringify(
-                { error: "User not found" }
-            ),
-            { status: 404 }
-        )
+    } else {
+        userID = userExistsVAR;
     }
 
     const slug = body["newProject"].replace(/ /g, "-").toLowerCase();
@@ -57,25 +57,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
         )
     }
 
-    let projectExists;
+    const projectExists: projectExistsInterface = await doesProjectExists("slug", slug, NaN, userID);
 
-    try {
-        projectExists = await sql`SELECT * FROM projects WHERE slug = ${slug} AND user_id = ${userID}`
-    } catch (e) {
+    if (projectExists["exists"]) {
         return new Response(
             JSON.stringify(
-                { error: "Internal server error. Can not get project" }
+                projectExists["json"]
             ),
-            { status: 500 }
-        )
-    }
-
-    if (projectExists.length > 0) {
-        return new Response(
-            JSON.stringify(
-                { error: "Project already exists" }
-            ),
-            { status: 409 }
+            { status: projectExists["status"] }
         )
     }
     

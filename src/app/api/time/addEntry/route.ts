@@ -3,7 +3,17 @@ import type { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../../../../pages/api/auth/[...nextauth]"
 
-import { sql } from "../../postgres"
+import { isAuthenticated } from '../../../../../helpers/isAuthenticated'
+import { userExists } from "../../../../../helpers/userExists";
+import { doesProjectExists } from "../../../../../helpers/projectExists";
+
+import { sql } from "../../../../../utils/postgres"
+
+interface projectExistsInterface {
+    exists: Boolean,
+    status: number,
+    json: Object
+}
 
 export async function POST(req: NextRequest, res: NextResponse) {
     const body = await req.json()
@@ -11,7 +21,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const session: any = await getServerSession(authOptions)
     const externalID = session.token.sub
 
-    if (!session) {
+    if (!isAuthenticated) {
         // Not Signed in
         return new Response(
             JSON.stringify(
@@ -19,6 +29,20 @@ export async function POST(req: NextRequest, res: NextResponse) {
             ),
             { status: 401 }
         )
+    }
+
+    const userExistsVAR = await userExists(externalID)
+    let userID = -1
+
+    if (!userExistsVAR) {
+        return new Response(
+            JSON.stringify(
+                { error: "Internal Server Error" }
+            ),
+            { status: 500 }
+        )
+    } else {
+        userID = userExistsVAR;
     }
 
     const time_seconds = Number(body["time_seconds"])
@@ -64,48 +88,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
         )
     }
 
-    let projectExists;
+    const projectExists: projectExistsInterface = await doesProjectExists("slug", slug, NaN, userID);
 
-    try {
-        projectExists = await sql`SELECT * FROM projects WHERE id = ${projectID} AND user_id = (SELECT id FROM users WHERE external_id = ${externalID})`
-    } catch (error) {
+    if (projectExists["exists"]) {
         return new Response(
             JSON.stringify(
-                { error: "Internal server error. Couldnt get the project" }
+                projectExists["json"]
             ),
-            { status: 500 }
-        )
-    }
-
-    if (projectExists.length === 0) {
-        return new Response(
-            JSON.stringify(
-                { error: "Project doesnt exist" }
-            ),
-            { status: 404 }
-        )
-    }
-
-    let userID = -1;
-
-    try {
-        const result = await sql`SELECT id FROM users WHERE external_id = ${externalID}`
-        userID = result[0].id
-    } catch (error) {
-        return new Response(
-            JSON.stringify(
-                { error: "Internal server error. Couldnt get user ID" }
-            ),
-            { status: 500 }
-        )
-    }
-
-    if (userID === -1) {
-        return new Response(
-            JSON.stringify(
-                { error: "Internal server error. Couldnt find user" }
-            ),
-            { status: 500 }
+            { status: projectExists["status"] }
         )
     }
 

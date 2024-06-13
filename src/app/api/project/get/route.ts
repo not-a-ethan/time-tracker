@@ -4,7 +4,10 @@ import { useSearchParams } from 'next/navigation'
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../../../pages/api/auth/[...nextauth]";
 
-import { sql } from "../../postgres"
+import { isAuthenticated } from '../../../../../helpers/isAuthenticated'
+import { userExists } from "../../../../../helpers/userExists";
+
+import { sql } from "../../../../../utils/postgres"
 
 export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams;
@@ -12,7 +15,7 @@ export async function GET(req: NextRequest) {
     const session: any = await getServerSession(authOptions)
     const externalID: Number = session.token.sub
 
-    if (session === null) {
+    if (!isAuthenticated) {
         return new Response(
             JSON.stringify(
                 { error: "You must be signed in to do that" }
@@ -21,30 +24,21 @@ export async function GET(req: NextRequest) {
         )
     }
 
-    let response;
-
+    const userExistsVAR = await userExists(externalID)
     let userID = -1
 
-    try {
-        const result = await sql`SELECT id FROM users WHERE external_id = ${externalID}`
-        userID = result[0].id
-    } catch (error) {
+    if (!userExistsVAR) {
         return new Response(
             JSON.stringify(
-                { error: "Internal server error" }
+                { error: "Internal Server Error" }
             ),
             { status: 500 }
         )
+    } else {
+        userID = userExistsVAR;
     }
 
-    if (userID === -1) {
-        return new Response(
-            JSON.stringify(
-                { error: "Internal server error" }
-            ),
-            { status: 500 }
-        )
-    }
+    let response;
 
     let id, slug;
 

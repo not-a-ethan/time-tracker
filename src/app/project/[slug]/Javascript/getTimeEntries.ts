@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 import styles from "./styles.module.css"
-import { time } from 'console';
 
 export default async function TimeEntries(id: number) {
     let timeEntries;

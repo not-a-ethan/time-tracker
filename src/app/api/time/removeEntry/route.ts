@@ -3,7 +3,11 @@ import type { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../../../../pages/api/auth/[...nextauth]"
 
-import { sql } from "../../postgres"
+import { isAuthenticated } from '../../../../../helpers/isAuthenticated'
+import { userExists } from "../../../../../helpers/userExists";
+import { doesTimeEntryExist } from '../../../../../helpers/timeEntryExists';
+
+import { sql } from "../../../../../utils/postgres"
 
 export async function DELETE(req: NextRequest, res: NextResponse) {
     const body = await req.json();
@@ -11,7 +15,7 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
     const session: any = await getServerSession(authOptions)
     const externalID = session.token.sub
 
-    if (!session) {
+    if (!isAuthenticated) {
         // Not Signed in
         return new Response(
             JSON.stringify(
@@ -19,6 +23,20 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
             ),
             { status: 401 }
         )
+    }
+
+    const userExistsVAR = await userExists(externalID)
+    let userID = -1
+
+    if (!userExistsVAR) {
+        return new Response(
+            JSON.stringify(
+                { error: "Internal Server Error" }
+            ),
+            { status: 500 }
+        )
+    } else {
+        userID = userExistsVAR;
     }
 
     const entryID = Number(body["id"])
@@ -46,48 +64,14 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
         )
     }
 
-    let userID = -1;
+    const entryExists = await doesTimeEntryExist(body["id"], userID)
 
-    try {
-        const result = await sql`SELECT id FROM users WHERE external_id = ${externalID}`
-        userID = result[0].id;
-    } catch (error) {
+    if (entryExists.exists) {
         return new Response(
             JSON.stringify(
-                { error: "Internal server error" }
+                entryExists["json"]
             ),
-            { status: 500 }
-        )
-    }
-
-    if (userID === -1) {
-        return new Response(
-            JSON.stringify(
-                { error: "Internal server error" }
-            ),
-            { status: 500 }
-        )
-    }
-
-    let entryExists;
-
-    try {
-        entryExists = await sql`SELECT * FROM time WHERE id = ${body["id"]} AND user_id = ${userID})`
-    } catch (error) {
-        return new Response(
-            JSON.stringify(
-                { error: "Internal server error" }
-            ),
-            { status: 500 }
-        )
-    }
-
-    if (entryExists.length === 0) {
-        return new Response(
-            JSON.stringify(
-                { error: "Entry not found" }
-            ),
-            { status: 404 }
+            { status: entryExists["status"] }
         )
     }
 

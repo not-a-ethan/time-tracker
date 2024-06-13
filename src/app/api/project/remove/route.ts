@@ -4,7 +4,18 @@ import { useSearchParams } from 'next/navigation'
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../../../pages/api/auth/[...nextauth]";
 
-import { sql } from "../../postgres"
+import { isAuthenticated } from '../../../../../helpers/isAuthenticated'
+import { userExists } from "../../../../../helpers/userExists";
+import { doesProjectExists } from "../../../../../helpers/projectExists";
+import { getProjectInfo } from '../../../../../helpers/projectInfo';
+
+import { sql } from "../../../../../utils/postgres"
+
+interface projectExistsInterface {
+    exists: Boolean,
+    status: number,
+    json: Object
+}
 
 export async function POST(req: NextRequest, res: NextResponse) {
     const body = await req.json()
@@ -12,7 +23,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const session: any = await getServerSession(authOptions)
     const externalID = session.token.sub
 
-    if (!session) {
+    if (!isAuthenticated) {
         // Not Signed in
         return new Response(
             JSON.stringify(
@@ -22,20 +33,19 @@ export async function POST(req: NextRequest, res: NextResponse) {
         )
     }
 
-    let userID: any = -1
+    const userExistsVAR = await userExists(externalID)
+    let userID = -1
 
-    try {
-        userID = await sql`SELECT id FROM users WHERE external_id = ${externalID}`
-    } catch (error) {
+    if (!userExistsVAR) {
         return new Response(
             JSON.stringify(
-                { error: "Internal server error. Can not get user" }
+                { error: "Internal Server Error" }
             ),
             { status: 500 }
         )
+    } else {
+        userID = userExistsVAR;
     }
-
-    userID = userID[0].id
 
     const slug = body["deleteSlug"]
 
@@ -48,32 +58,23 @@ export async function POST(req: NextRequest, res: NextResponse) {
         )
     }
 
-    let projectExists;
-    
-    try {
-        projectExists = await sql`SELECT * FROM projects WHERE slug = ${slug} AND user_id = ${userID}`
-    } catch (e) {
+    const projectExists: projectExistsInterface = await doesProjectExists("slug", slug, NaN, userID);
+
+    if (projectExists["exists"]) {
         return new Response(
             JSON.stringify(
-                { error: "Internal server error. Can not get project" }
+                projectExists["json"]
             ),
-            { status: 500 }
+            { status: projectExists["status"] }
         )
     }
 
-    if (projectExists.length === 0) {
-        return new Response(
-            JSON.stringify(
-                { error: "Project not found" }
-            ),
-            { status: 404 }
-        )
-    }
+    const projectInfo: any = getProjectInfo("slug", slug, NaN, userID)
 
     let timeResponse;
 
     try {
-        timeResponse = await sql`DELETE FROM timeentries WHERE project_id = ${projectExists[0].id}`
+        timeResponse = await sql`DELETE FROM timeentries WHERE project_id = ${projectInfo[0].id}`
     } catch (error) {
         return new Response(
             JSON.stringify(

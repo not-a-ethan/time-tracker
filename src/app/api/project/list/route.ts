@@ -4,13 +4,16 @@ import { useSearchParams } from 'next/navigation'
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../../../pages/api/auth/[...nextauth]";
 
-import { sql } from "../../postgres"
+import { isAuthenticated } from '../../../../../helpers/isAuthenticated'
+import { userExists } from "../../../../../helpers/userExists";
+
+import { sql } from "../../../../../utils/postgres"
 
 export async function GET(req: NextRequest, res: NextResponse) {
     const session: any = await getServerSession(authOptions)
-    const external_id = session.token.sub
+    const externalID = session.token.sub
 
-    if (!session) {
+    if (!isAuthenticated) {
         // Not Signed in
         return new Response(
             JSON.stringify(
@@ -20,18 +23,18 @@ export async function GET(req: NextRequest, res: NextResponse) {
         )
     }
 
-    let userID = -1;
+    const userExistsVAR = await userExists(externalID)
+    let userID = -1
 
-    try {
-        const user = await sql`SELECT * FROM users WHERE external_id = ${external_id}`;
-        userID = user[0].id;
-    } catch (e) {
+    if (!userExistsVAR) {
         return new Response(
             JSON.stringify(
                 { error: "Internal Server Error" }
             ),
             { status: 500 }
         )
+    } else {
+        userID = userExistsVAR;
     }
 
     let response;

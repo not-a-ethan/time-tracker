@@ -3,7 +3,17 @@ import type { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../../../../pages/api/auth/[...nextauth]"
 
-import { sql } from "../../postgres"
+import { isAuthenticated } from '../../../../../helpers/isAuthenticated'
+import { userExists } from "../../../../../helpers/userExists";
+import { doesProjectExists } from "../../../../../helpers/projectExists";
+
+import { sql } from "../../../../../utils/postgres"
+
+interface projectExistsInterface {
+    exists: Boolean,
+    status: number,
+    json: Object
+}
 
 export async function POST(req: NextRequest, res: NextResponse) {
     const body = await req.json();
@@ -11,7 +21,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const session: any = await getServerSession(authOptions)
     const externalID = session.token.sub
 
-    if (!session) {
+    if (!isAuthenticated) {
         // Not Signed in
         return new Response(
             JSON.stringify(
@@ -21,27 +31,18 @@ export async function POST(req: NextRequest, res: NextResponse) {
         )
     }
 
-    let userID = -1;
+    const userExistsVAR = await userExists(externalID)
+    let userID = -1
 
-    try {
-        const user = await sql`SELECT * FROM users WHERE external_id = ${externalID}`;
-        userID = user[0].id;
-    } catch (e) {
+    if (!userExistsVAR) {
         return new Response(
             JSON.stringify(
                 { error: "Internal Server Error" }
             ),
             { status: 500 }
         )
-    }
-
-    if (userID === -1) {
-        return new Response(
-            JSON.stringify(
-                { error: "Internal Server Error" }
-            ),
-            { status: 500 }
-        )
+    } else {
+        userID = userExistsVAR;
     }
 
     if (typeof body["id"] !== "number") {
@@ -156,25 +157,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
         }
     } else if (body["data"] === "project") {
         const newProjectID = body["project_id"];
-        let projectExists;
 
-        try {
-            projectExists = await sql`SELECT * FROM projects WHERE id = ${newProjectID}`;
-        } catch (e) {
+        const projectExists: projectExistsInterface = await doesProjectExists("id", "", newProjectID, userID);
+
+        if (projectExists["exists"]) {
             return new Response(
                 JSON.stringify(
-                    { error: "Internal Server Error" }
+                    projectExists["json"]
                 ),
-                { status: 500 }
-            )
-        }
-
-        if (projectExists.length === 0) {
-            return new Response(
-                JSON.stringify(
-                    { error: "Internal Server Error" }
-                ),
-                { status: 400 }
+                { status: projectExists["status"] }
             )
         }
 
