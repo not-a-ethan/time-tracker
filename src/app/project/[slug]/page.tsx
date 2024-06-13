@@ -43,10 +43,11 @@ function Page({ params }: { params: { slug: string } }) {
     }
     
     function confirmation() {        
-        const element = document.getElementsByClassName("trueSubmit")
+        const element = document.getElementsByClassName("trueSubmit")[0]
 
         if (element !== null) {
-            element[0].style.display = "block";
+            const button = element as HTMLElement
+            button.style.display = "block";
         }
     }
 
