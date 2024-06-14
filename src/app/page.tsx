@@ -2,13 +2,15 @@
 
 import type { NextPage } from 'next'
 import { Metadata } from 'next'
-import Head from 'next/head'
-import Script from 'next/script'
+import { useRouter } from 'next/navigation'
+
 import { useSession, getSession } from "next-auth/react"
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation'
+
 import { useForm, Controller } from 'react-hook-form';
+
+import toast, { Toaster } from 'react-hot-toast'
 
 import styles from './styles.module.css'
 
@@ -37,8 +39,19 @@ function Index() {
             body: JSON.stringify(data),
         })
         .then(response => response.json())
-        .then(data => data)
-        .catch((error) => console.error('Error:', error));
+        .then(data => {
+            if (data.status === 200) {
+                toast.success("API request successful!")
+            } else {
+                console.log(data)
+                toast.error(data.error)
+            }
+            
+            return data
+        })
+        .catch((error) => {
+            console.error('Error:', error)
+        });
     }
 
     const { data: session, status } = useSession()
@@ -198,6 +211,8 @@ function Index() {
                     <p className={styles.timeTracked}>Total time tracked: <span id="totalTime"></span></p>
                 </div>
             </main>
+
+            <Toaster />
         </div>
     )
 }

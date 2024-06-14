@@ -6,6 +6,8 @@ import { useSession, getSession } from "next-auth/react"
 
 import { useForm } from 'react-hook-form';
 
+import toast, { Toaster } from 'react-hot-toast'
+
 import ProjectName from './Javascript/projectName'
 import TimeEntryName from '../components/entryName'
 import PastTime from "../components/pastTime"
@@ -24,6 +26,14 @@ function Page({ params }: { params: { slug: string } }) {
             method: "GET",
         })
         .then(response => response.json())
+        .then(data => {
+            if (data.status !== 200) {
+                console.log(data)
+                toast.error(data.error)
+            }
+            
+            return data
+        })
         .catch((error) => console.error(error))
         .then(data => 
             fetch(endpoint, {
@@ -34,7 +44,16 @@ function Page({ params }: { params: { slug: string } }) {
                 body: JSON.stringify({ deleteSlug: data[0].project_name })
             })
             .then(response => response.json())
-            .then(data => data)
+            .then(data => {
+                if (data.status === 200) {
+                    toast.success("API request successful!")
+                } else {
+                    console.log(data)
+                    toast.error(data.error)
+                }
+
+                return data
+            })
             .catch((error) => console.error('Error:', error))
         )
  
@@ -115,6 +134,8 @@ function Page({ params }: { params: { slug: string } }) {
                     </div>
                     
                 </div>
+
+                <Toaster />
             </>
         )
     }
