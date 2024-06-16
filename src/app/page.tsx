@@ -30,7 +30,24 @@ function Index() {
     const router = useRouter();
     const { handleSubmit, control } = useForm();
 
+    const timeEntry = (endpoint: string) => (data: any) => {
+        console.log("Thing was called")
+        const seconds = (data["time_hours"] * 60 * 60) + (data["time_minutes"] * 60) + data["time_seconds"]
+
+        const newData = {
+            entryName: data["entryName"],
+            slug: data["slug"],
+            time_seconds: seconds
+        }
+
+        apiReqeusts(endpoint, newData)
+    }
+
     const createOnSubmitHandler = (endpoint: string) => (data: any) => {
+        apiReqeusts(endpoint, data)
+    }
+
+    const apiReqeusts = (endpoint: string, data: any) => {
         fetch(endpoint, {
             method: 'POST',
             headers: {
@@ -155,7 +172,7 @@ function Index() {
 
                     <iframe name="dummyframe3" id="dummyframe" className={styles.iframe}></iframe>
 
-                    <form method="POST" target="dummyframe3" className={styles.form} onSubmit={handleSubmit(createOnSubmitHandler('/api/time/addEntry'))}>
+                    <form method="POST" target="dummyframe3" className={styles.form} onSubmit={handleSubmit(timeEntry('/api/time/addEntry'))}>
                         <div className={`${styles["form-input"]}`}>
                             <Controller
                                 name="slug"
@@ -188,17 +205,43 @@ function Index() {
                             <br />
 
                             <Controller
-                            name="time_seconds"
+                            name="time_hours"
                             control={control}
                             render={({ field }) => (
                                 <ShortTextInput 
-                                    text="Time (seconds)" 
+                                    text="Hours" 
                                     height="2.5vh"
                                     width="5vw"
                                     {...field} 
                                 />
                             )}
-                        />
+                            />
+
+                        <Controller
+                            name="time_minutes"
+                            control={control}
+                            render={({ field }) => (
+                                <ShortTextInput 
+                                    text="Minutes" 
+                                    height="2.5vh"
+                                    width="5vw"
+                                    {...field} 
+                                />
+                            )}
+                            />
+
+                        <Controller
+                            name="time_seconds"
+                            control={control}
+                            render={({ field }) => (
+                                <ShortTextInput 
+                                    text="seconds" 
+                                    height="2.5vh"
+                                    width="5vw"
+                                    {...field} 
+                                />
+                            )}
+                            />
                         </div>
 
                         <div className={styles["form-submit"]} style={{display: 'block', margin: 'auto 0', marginLeft: "7.5%"}}>
