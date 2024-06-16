@@ -32,7 +32,11 @@ function Index() {
 
     const timeEntry = (endpoint: string) => (data: any) => {
         console.log("Thing was called")
-        const seconds = (data["time_hours"] * 60 * 60) + (data["time_minutes"] * 60) + data["time_seconds"]
+        const seconds = (Number(data["time_hours"]) * 60 * 60) + (Number(data["time_minutes"]) * 60) + Number(data["time_seconds"])
+
+        console.log(data["time_hours"])
+        console.log(data["time_minutes"])
+        console.log(data["time_seconds"])
 
         const newData = {
             entryName: data["entryName"],
