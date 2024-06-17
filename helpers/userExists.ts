@@ -12,7 +12,6 @@ export async function userExists(externalID: Number) {
     }
 
     if (userID === -1) {
-        console.log("user does not exist")
         return false
     }
 

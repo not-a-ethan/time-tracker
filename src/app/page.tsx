@@ -31,12 +31,7 @@ function Index() {
     const { handleSubmit, control } = useForm();
 
     const timeEntry = (endpoint: string) => (data: any) => {
-        console.log("Thing was called")
         const seconds = (Number(data["time_hours"]) * 60 * 60) + (Number(data["time_minutes"]) * 60) + Number(data["time_seconds"])
-
-        console.log(data["time_hours"])
-        console.log(data["time_minutes"])
-        console.log(data["time_seconds"])
 
         const newData = {
             entryName: data["entryName"],
@@ -59,16 +54,14 @@ function Index() {
             },
             body: JSON.stringify(data),
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 200) {
+        .then(response => {
+            if (response.status === 200) {
                 toast.success("API request successful!")
             } else {
-                console.log(data)
-                toast.error(data.error)
+                toast.error("Something went wrong")
             }
             
-            return data
+            return response
         })
         .catch((error) => {
             console.error('Error:', error)

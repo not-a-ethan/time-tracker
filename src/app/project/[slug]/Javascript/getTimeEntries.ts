@@ -19,8 +19,6 @@ export default async function TimeEntries(id: number) {
             return null;
         }
 
-        console.log(json)
-
         json = json.reverse();
         timeEntries = json;
 

@@ -43,16 +43,14 @@ function Page({ params }: { params: { slug: string } }) {
                 },
                 body: JSON.stringify({ deleteSlug: data[0].project_name })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 200) {
+            .then(response => {
+                if (response.status === 200) {
                     toast.success("API request successful!")
                 } else {
-                    console.log(data)
-                    toast.error(data.error)
+                    toast.error("Something went wrong")
                 }
-
-                return data
+                
+                return response
             })
             .catch((error) => console.error('Error:', error))
         )
