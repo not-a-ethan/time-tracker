@@ -37,7 +37,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     let userID = -1
 
     if (!userExistsVAR) {
-        console.log(userExists)
         return new Response(
             JSON.stringify(
                 { error: "Internal Server Error" }
@@ -77,7 +76,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     try {
         deleteTimeEntries = await sql`DELETE FROM timeentries WHERE project_id = ${projectInfo[0].id}`
     } catch (error) {
-        console.log(error)
         return new Response(
             JSON.stringify(
                 { error: "Internal server error. Was not able to delete time entries" }

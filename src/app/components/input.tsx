@@ -9,11 +9,10 @@ interface ShortTextInputProps {
     name: string;
     height: string;
     width: string;
-    value: string;
 }
 
 const ShortTextInput = React.forwardRef<HTMLInputElement, ShortTextInputProps>(
-    ({ text, name, height, width, value }, ref) => (
+    ({ text, name, height, width }, ref) => (
       <input 
         type="text" 
         name={name} 

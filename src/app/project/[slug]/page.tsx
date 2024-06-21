@@ -37,13 +37,13 @@ function Page({ params }: { params: { slug: string } }) {
             }
         }
         
-        console.log(values);
-
         if (endpoint === "/api/time/addEntry") {
             timeEntry(endpoint, values)
         } else if (endpoint === "/api/project/remove") {
             deleteSubmitHandler(endpoint, values)
         }
+
+        return (SubmitEvent: any) => SubmitEvent.preventDefault();
     }
 
     const deleteSubmitHandler = (endpoint: string, data: any) => {
@@ -53,7 +53,6 @@ function Page({ params }: { params: { slug: string } }) {
         .then(response => response.json())
         .then(data => {
             if (data.status !== 200) {
-                console.log(data)
                 toast.error(data.error)
             }
             
@@ -210,7 +209,6 @@ function Page({ params }: { params: { slug: string } }) {
                                     control={control}
                                     render={({ field }) => (
                                         <ShortTextInput
-                                            name="entryName"
                                             text="Entry name" 
                                             height="2.5vh"
                                             width="5vw"
@@ -226,7 +224,6 @@ function Page({ params }: { params: { slug: string } }) {
                                     control={control}
                                     render={({ field }) => (
                                         <ShortTextInput
-                                            name="time_hours"
                                             text="Hours" 
                                             height="2.5vh"
                                             width="5vw"
@@ -240,7 +237,6 @@ function Page({ params }: { params: { slug: string } }) {
                                     control={control}
                                     render={({ field }) => (
                                         <ShortTextInput
-                                            name="time_minutes"
                                             text="Minutes" 
                                             height="2.5vh"
                                             width="5vw"
@@ -254,7 +250,6 @@ function Page({ params }: { params: { slug: string } }) {
                                     control={control}
                                     render={({ field }) => (
                                         <ShortTextInput
-                                            name='time_seconds'
                                             text="seconds" 
                                             height="2.5vh"
                                             width="5vw"

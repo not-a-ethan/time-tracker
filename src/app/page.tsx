@@ -40,13 +40,13 @@ function Index() {
             }
         }
         
-        console.log(values);
-
         if (endpoint === "/api/time/addEntry") {
             timeEntry(endpoint, values)
         } else {
             apiReqeusts(endpoint, values)
         }
+
+        return (SubmitEvent: any) => SubmitEvent.preventDefault();
     }
 
     const timeEntry = (endpoint: string, data: any) => {
@@ -59,6 +59,8 @@ function Index() {
         }
 
         apiReqeusts(endpoint, newData)
+
+        return (SubmitEvent: any) => SubmitEvent.preventDefault();
     }
 
 
@@ -138,7 +140,6 @@ function Index() {
                             control={control}
                             render={({ field }) => (
                                 <ShortTextInput
-                                    name="newProject"
                                     text="Project name" 
                                     height="2.5vh"
                                     width="5vw"
@@ -169,7 +170,6 @@ function Index() {
                             control={control}
                             render={({ field }) => (
                                 <ShortTextInput
-                                    name="deleteSlug"
                                     text="Project name" 
                                     height="2.5vh"
                                     width="5vw"
@@ -194,7 +194,6 @@ function Index() {
                                 control={control}
                                 render={({ field }) => (
                                     <ShortTextInput
-                                        name="slug"
                                         text="Project name" 
                                         height="2.5vh"
                                         width="5vw"
@@ -210,7 +209,6 @@ function Index() {
                                 control={control}
                                 render={({ field }) => (
                                     <ShortTextInput
-                                        name="entryName"
                                         text="Entry name" 
                                         height="2.5vh"
                                         width="5vw"
@@ -226,7 +224,6 @@ function Index() {
                             control={control}
                             render={({ field }) => (
                                 <ShortTextInput
-                                    name='time_hours'
                                     text="Hours" 
                                     height="2.5vh"
                                     width="5vw"
@@ -240,7 +237,6 @@ function Index() {
                             control={control}
                             render={({ field }) => (
                                 <ShortTextInput
-                                    name="time_minutes"
                                     text="Minutes" 
                                     height="2.5vh"
                                     width="5vw"
@@ -254,7 +250,6 @@ function Index() {
                             control={control}
                             render={({ field }) => (
                                 <ShortTextInput
-                                    name='time_seconds'
                                     text="seconds" 
                                     height="2.5vh"
                                     width="5vw"
