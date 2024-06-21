@@ -27,7 +27,26 @@ function Page({ params }: { params: { slug: string } }) {
 
     const id = Number(params.slug);
 
-    const deleteSubmitHandler = (endpoint: string) => (data: any) => {
+    const createOnSubmitHandler = (endpoint: string, event: any) => {
+        const values: any = {};
+        
+        for (let i = 0; i < event.target.length; i++) {
+            const element = event.target[i];
+            if (element.name && element.value) {
+                values[element.name] = element.value;
+            }
+        }
+        
+        console.log(values);
+
+        if (endpoint === "/api/time/addEntry") {
+            timeEntry(endpoint, values)
+        } else if (endpoint === "/api/project/remove") {
+            deleteSubmitHandler(endpoint, values)
+        }
+    }
+
+    const deleteSubmitHandler = (endpoint: string, data: any) => {
         fetch(`/api/project/get?type=id&id=${id}`, {
             method: "GET",
         })
@@ -65,9 +84,8 @@ function Page({ params }: { params: { slug: string } }) {
         return;
     }
 
-    const timeEntry = (endpoint: string) => (data: any) => {
-        console.log("This is being called")
-        fetch(`/api/project/get?id=${id}`)
+    const timeEntry = (endpoint: string, data: any) => {
+        fetch(`/api/project/get?type=id&id=${id}`)
         .then(response => response.json())
         .then(projectData => {
             const seconds = (Number(data["time_hours"]) * 60 * 60) + (Number(data["time_minutes"]) * 60) + Number(data["time_seconds"])
@@ -138,7 +156,7 @@ function Page({ params }: { params: { slug: string } }) {
 
                     <iframe name="dummyframe2" id="dummyframe" className={styles.iframe}></iframe>
 
-                    <form target="dummyframe2" className={styles.form} onSubmit={handleSubmit(deleteSubmitHandler('/api/project/remove'))} >
+                    <form target="dummyframe2" className={styles.form} onSubmit={handleSubmit((e) => createOnSubmitHandler('/api/project/remove', e))} >
                         <button className={styles.button} id="trueSubmit" onClick={confirmation} type='button' >
                             <img 
                                 src="/images/trash.svg" 
@@ -179,20 +197,18 @@ function Page({ params }: { params: { slug: string } }) {
 
                         <iframe name="dummyframe3" id="dummyframe" className={styles.iframe}></iframe>
 
-                        <form method="POST" target="dummyframe3" className={styles.form} onSubmit={handleSubmit(timeEntry('/api/time/addEntry'))}>
+                        <form method="POST" target="dummyframe3" className={styles.form} onSubmit={(e) => handleSubmit(createOnSubmitHandler('/api/time/addEntry', e))}>
                             <div className={`${styles["form-input"]}`}>
                                 <Controller
                                     name="entryName"
                                     control={control}
-                                    defaultValue={""}
                                     render={({ field }) => (
-                                        <ShortTextInput 
+                                        <ShortTextInput
+                                            name="entryName"
                                             text="Entry name" 
                                             height="2.5vh"
                                             width="5vw"
                                             {...field}
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(e.target.value)}
                                         />
                                     )}
                                 />
@@ -202,15 +218,13 @@ function Page({ params }: { params: { slug: string } }) {
                                 <Controller
                                     name="time_hours"
                                     control={control}
-                                    defaultValue={""}
                                     render={({ field }) => (
-                                        <ShortTextInput 
+                                        <ShortTextInput
+                                            name="time_hours"
                                             text="Hours" 
                                             height="2.5vh"
                                             width="5vw"
                                             {...field} 
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(e.target.value)}
                                         />
                                     )}
                                 />
@@ -218,15 +232,13 @@ function Page({ params }: { params: { slug: string } }) {
                                 <Controller
                                     name="time_minutes"
                                     control={control}
-                                    defaultValue={""}
                                     render={({ field }) => (
-                                        <ShortTextInput 
+                                        <ShortTextInput
+                                            name="time_minutes"
                                             text="Minutes" 
                                             height="2.5vh"
                                             width="5vw"
                                             {...field}
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(e.target.value)}
                                         />
                                     )}
                                 />
@@ -234,15 +246,13 @@ function Page({ params }: { params: { slug: string } }) {
                                 <Controller
                                     name="time_seconds"
                                     control={control}
-                                    defaultValue={""}
                                     render={({ field }) => (
-                                        <ShortTextInput 
+                                        <ShortTextInput
+                                            name='time_seconds'
                                             text="seconds" 
                                             height="2.5vh"
                                             width="5vw"
                                             {...field}
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(e.target.value)}
                                         />
                                     )}
                                 />
