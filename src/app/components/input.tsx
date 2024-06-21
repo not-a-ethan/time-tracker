@@ -1,29 +1,28 @@
 'use client'
 
+import React from 'react'
+
 import styles from "./css/input.module.css";
 
 interface ShortTextInputProps {
     text: string;
+    name: string;
     height: string;
     width: string;
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
     value: string;
 }
 
-function ShortTextInput({ text, height, width, onChange, onBlur, value }: ShortTextInputProps) {
-    return (
-        <input 
+const ShortTextInput = React.forwardRef<HTMLInputElement, ShortTextInputProps>(
+    ({ text, name, height, width, value }, ref) => (
+      <input 
         type="text" 
-        name={text} 
+        name={name} 
         placeholder={text} 
-        style={{height: height, width: width}} 
+        style={{height, width}} 
         className={styles["short-input"]} 
-        onChange={onChange}
-        onBlur={onBlur}
-        value={value}
-        />
-    );
-}
+        ref={ref}
+      />
+    )
+  );
 
 export default ShortTextInput;

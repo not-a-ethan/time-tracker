@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 
 import { useSession, getSession } from "next-auth/react"
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { useForm, Controller } from 'react-hook-form';
 
@@ -17,8 +17,8 @@ import styles from './styles.module.css'
 import { getProjects } from './Javascript/getProjects'
 import { getTimeData } from './Javascript/getTimeData'
 
-import  Button  from './components/button'
-import  ShortTextInput  from './components/input'
+import Button  from './components/button'
+import ShortTextInput  from './components/input'
 
 /*
 export const metadata: Metadata = {
@@ -30,7 +30,26 @@ function Index() {
     const router = useRouter();
     const { handleSubmit, control } = useForm();
 
-    const timeEntry = (endpoint: string) => (data: any) => {
+    const createOnSubmitHandler = (endpoint: string, event: any) => {
+        const values: any = {};
+        
+        for (let i = 0; i < event.target.length; i++) {
+            const element = event.target[i];
+            if (element.name && element.value) {
+            values[element.name] = element.value;
+            }
+        }
+        
+        console.log(values);
+
+        if (endpoint === "/api/time/addEntry") {
+            timeEntry(endpoint, values)
+        } else {
+            apiReqeusts(endpoint, values)
+        }
+    }
+
+    const timeEntry = (endpoint: string, data: any) => {
         const seconds = (Number(data["time_hours"]) * 60 * 60) + (Number(data["time_minutes"]) * 60) + Number(data["time_seconds"])
 
         const newData = {
@@ -42,9 +61,6 @@ function Index() {
         apiReqeusts(endpoint, newData)
     }
 
-    const createOnSubmitHandler = (endpoint: string) => (data: any) => {
-        apiReqeusts(endpoint, data)
-    }
 
     const apiReqeusts = (endpoint: string, data: any) => {
         fetch(endpoint, {
@@ -116,12 +132,13 @@ function Index() {
 
                     <iframe name="dummyframe" id="dummyframe" className={styles.iframe}></iframe>
 
-                    <form target="dummyframe" className={styles.form} onSubmit={handleSubmit(createOnSubmitHandler('/api/project/new'))}>
+                    <form target="dummyframe" className={styles.form} onSubmit={(e) => handleSubmit(createOnSubmitHandler('/api/project/new', e))}>
                         <Controller
                             name="newProject"
                             control={control}
                             render={({ field }) => (
-                                <ShortTextInput 
+                                <ShortTextInput
+                                    name="newProject"
                                     text="Project name" 
                                     height="2.5vh"
                                     width="5vw"
@@ -146,12 +163,13 @@ function Index() {
 
                     <iframe name="dummyframe2" id="dummyframe" className={styles.iframe}></iframe>
 
-                    <form target="dummyframe2" className={styles.form} onSubmit={handleSubmit(createOnSubmitHandler('/api/project/remove'))}>
+                    <form target="dummyframe2" className={styles.form} onSubmit={(e) => handleSubmit(createOnSubmitHandler('/api/project/remove', e))}>
                         <Controller
                             name="deleteSlug"
                             control={control}
                             render={({ field }) => (
-                                <ShortTextInput 
+                                <ShortTextInput
+                                    name="deleteSlug"
                                     text="Project name" 
                                     height="2.5vh"
                                     width="5vw"
@@ -169,13 +187,14 @@ function Index() {
 
                     <iframe name="dummyframe3" id="dummyframe" className={styles.iframe}></iframe>
 
-                    <form method="POST" target="dummyframe3" className={styles.form} onSubmit={handleSubmit(timeEntry('/api/time/addEntry'))}>
+                    <form method="POST" target="dummyframe3" className={styles.form} onSubmit={(e) => handleSubmit(timeEntry('/api/time/addEntry', e))}>
                         <div className={`${styles["form-input"]}`}>
                             <Controller
                                 name="slug"
                                 control={control}
                                 render={({ field }) => (
-                                    <ShortTextInput 
+                                    <ShortTextInput
+                                        name="slug"
                                         text="Project name" 
                                         height="2.5vh"
                                         width="5vw"
@@ -190,7 +209,8 @@ function Index() {
                                 name="entryName"
                                 control={control}
                                 render={({ field }) => (
-                                    <ShortTextInput 
+                                    <ShortTextInput
+                                        name="entryName"
                                         text="Entry name" 
                                         height="2.5vh"
                                         width="5vw"
@@ -205,7 +225,8 @@ function Index() {
                             name="time_hours"
                             control={control}
                             render={({ field }) => (
-                                <ShortTextInput 
+                                <ShortTextInput
+                                    name='time_hours'
                                     text="Hours" 
                                     height="2.5vh"
                                     width="5vw"
@@ -218,7 +239,8 @@ function Index() {
                             name="time_minutes"
                             control={control}
                             render={({ field }) => (
-                                <ShortTextInput 
+                                <ShortTextInput
+                                    name="time_minutes"
                                     text="Minutes" 
                                     height="2.5vh"
                                     width="5vw"
@@ -231,7 +253,8 @@ function Index() {
                             name="time_seconds"
                             control={control}
                             render={({ field }) => (
-                                <ShortTextInput 
+                                <ShortTextInput
+                                    name='time_seconds'
                                     text="seconds" 
                                     height="2.5vh"
                                     width="5vw"
