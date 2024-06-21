@@ -151,6 +151,12 @@ function Page({ params }: { params: { slug: string } }) {
             <>
                 <div className={styles.header}>
                     <h1 className={styles.text}>
+                        <a href='/'>
+                            <img
+                                src='/images/home.svg'
+                                alt='home'
+                            />
+                        </a>
                         <ProjectName id={id} />
                     </h1>
 
