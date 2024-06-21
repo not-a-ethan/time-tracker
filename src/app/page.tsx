@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 
 import { useSession, getSession } from "next-auth/react"
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { useForm, Controller } from 'react-hook-form';
 
@@ -17,8 +17,8 @@ import styles from './styles.module.css'
 import { getProjects } from './Javascript/getProjects'
 import { getTimeData } from './Javascript/getTimeData'
 
-import  Button  from './components/button'
-import  ShortTextInput  from './components/input'
+import Button  from './components/button'
+import ShortTextInput  from './components/input'
 
 /*
 export const metadata: Metadata = {

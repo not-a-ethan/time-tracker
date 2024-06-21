@@ -75,3 +75,20 @@
 .trueSubmit {
     display: none;
 }
+  
+.form {
+    display: grid;
+    width: fit-content;
+    grid-template-columns: 50% 50%;
+    gap: 4%;
+}
+
+.form-input {
+    grid-column: 1;
+    width: 5vw;
+}
+
+.form-submit {
+    grid-column: 2;
+    width: 5vw;
+}
