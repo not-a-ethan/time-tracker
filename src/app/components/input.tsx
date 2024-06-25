@@ -24,4 +24,6 @@ const ShortTextInput = React.forwardRef<HTMLInputElement, ShortTextInputProps>(
     )
   );
 
+ShortTextInput.displayName = 'ShortTextInput';
+
 export default ShortTextInput;

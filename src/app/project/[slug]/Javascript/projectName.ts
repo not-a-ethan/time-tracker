@@ -31,7 +31,7 @@ export default function GetProjectName(props: any) {
         };
 
         fetchProjectName();
-    }, [id]);
+    }, [id, router]);
 
     return (
         React.createElement('span', { id: 'projectName' },
