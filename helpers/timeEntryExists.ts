@@ -4,13 +4,13 @@ export async function doesTimeEntryExist(id: Number, userId: Number) {
     let entryExists;
 
     try {
-        entryExists = await sql`SELECT * FROM time WHERE id = ${"id"} AND user_id = ${userId})`
+        entryExists = await sql`SELECT * FROM timeentries WHERE id = ${id} AND user_id = ${userId}`
     } catch (error) {
         return {
             exists: true,
             status: 500,
             json: { 
-                error: "Internal server error" 
+                error: "Internal server error | Could not get time entry" 
             }
         }
     }

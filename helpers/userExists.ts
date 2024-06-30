@@ -7,7 +7,6 @@ export async function userExists(externalID: Number) {
         const result = await sql`SELECT id FROM users WHERE external_id = ${externalID}`
         userID = result[0].id
     } catch (error) {
-        console.log(error)
         return false
     }
 

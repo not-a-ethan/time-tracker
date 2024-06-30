@@ -31,7 +31,7 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
     if (!userExistsVAR) {
         return new Response(
             JSON.stringify(
-                { error: "Internal Server Error" }
+                { error: "Internal Server Error | user does not exist" }
             ),
             { status: 500 }
         )
@@ -76,13 +76,20 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
     }
 
     try {
-        await sql`DELETE FROM time WHERE id = ${body["id"]}`
+        await sql`DELETE FROM timeentries WHERE id = ${body["id"]}`
     } catch (error) {
         return new Response(
             JSON.stringify(
-                { error: "Internal server error" }
+                { error: "Internal server error | time entry unable to be removed" }
             ),
             { status: 500 }
         )
     }
+
+    return new Response(
+        JSON.stringify(
+            { "message": "sucess" }
+        ),
+        { status: 200 }
+    )
 }

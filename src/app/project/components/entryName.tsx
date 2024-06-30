@@ -10,20 +10,24 @@ export default function TimeEntryName(props: any) {
     const id = Number(props.id);
     const type = props.type;
 
-    const deleteTimeEntry = async (e: any) => {                
-        try {
-            const id = e.target.id;
-            apiReqeusts("/api/time/removeEntry", {id: `${id}`})
-        } catch (error) {
-            toast.error("Somethign went wrong deleting the time entry")
-        }   
-
+    const deleteTimeEntry = async (e: any) => {
+        if (confirm("Are you sure you want to delete the time entry?")){
+            try {
+                const id = e.target.id;
+                apiReqeusts("/api/time/removeEntry", {id: `${id}`}, "DELETE")
+            } catch (error) {
+            }
+            return;
+        } else {
+            //toast.error("Deletion canceled")
+        }
+        
         return;
     }
 
-    const apiReqeusts = (endpoint: string, data: any) => {
+    const apiReqeusts = (endpoint: string, data: any, method: string) => {
         fetch(endpoint, {
-            method: 'POST',
+            method: `${method}`,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -31,9 +35,9 @@ export default function TimeEntryName(props: any) {
         })
         .then(response => {
             if (response.status === 200) {
-                toast.success("API request successful!")
+                //toast.success("API request successful!")
             } else {
-                toast.error("Something went wrong")
+                //toast.error("Something went wrong")
             }
             
             return response
