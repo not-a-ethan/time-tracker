@@ -37,11 +37,20 @@
     grid-column: 5;
 }
 
+.column6 {
+    grid-column: 6;
+}
+
+.column7 {
+    grid-column: 7;
+}
+
 .timeEntries {
     display: grid;
-    grid-gap: 1vw;
-    grid-template-columns: [col1] minmax(0, 1fr) [col2] 0.025fr [col3] 0.2fr [col4] 0.025fr [col5] minmax(0, 1fr);
-    max-width: 46vw;
+    grid-gap: 0.75vw;
+    /*grid-template-columns: [col1] minmax(0, 1fr) [col2] 0.025fr [col3] 0.2fr [col4] 0.025fr [col5] minmax(0, 1fr);*/
+    grid-template-columns: [col1] minmax(0, 1fr) [col2] 0.025fr [col3] 0.2fr [col4] 0.025fr [col5] 0.2fr [col6] 0.025fr [col7] minmax(0, 1fr);
+    max-width: 50vw;
 }
 
 .dividers {

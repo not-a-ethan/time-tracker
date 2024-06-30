@@ -9,3 +9,12 @@
 .list {
     padding: 0
 }
+
+.button {
+    background: none;
+    border: none;
+}
+
+.trash {
+    height: 32px;
+}

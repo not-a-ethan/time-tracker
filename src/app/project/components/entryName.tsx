@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import toast from 'react-hot-toast'
+
 import TimeEntries from '../[slug]/Javascript/getTimeEntries'
 
 import styles from "./css/entries.module.css"
@@ -8,8 +10,40 @@ export default function TimeEntryName(props: any) {
     const id = Number(props.id);
     const type = props.type;
 
+    const deleteTimeEntry = async (e: any) => {                
+        try {
+            const id = e.target.id;
+            apiReqeusts("/api/time/removeEntry", {id: `${id}`})
+        } catch (error) {
+            toast.error("Somethign went wrong deleting the time entry")
+        }   
+
+        return;
+    }
+
+    const apiReqeusts = (endpoint: string, data: any) => {
+        fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => {
+            if (response.status === 200) {
+                toast.success("API request successful!")
+            } else {
+                toast.error("Something went wrong")
+            }
+            
+            return response
+        })
+        .catch((error) => {
+            console.error('Error:', error)
+        });
+    }
+
     const [jsxResult, setJsxResult] = useState(<div>Loading...</div>);
-    
 
     interface TimeEntry {
         entry_name: string;
@@ -33,7 +67,7 @@ export default function TimeEntryName(props: any) {
                         setJsxResult(
                             <ul className={styles.list}>
                                 {result.map((entry: TimeEntry) => (
-                                    <li key={entry.id} className={`${styles.text} ${styles.listItem}`}>
+                                    <li key={entry.id} id={String(entry.id)} className={`${styles.text} ${styles.listItem}`}>
                                         {entry.entry_name}
                                     </li>
                                 ))}
@@ -43,7 +77,7 @@ export default function TimeEntryName(props: any) {
                         setJsxResult(
                             <ul className={styles.list}>
                                 {result.map((entry: TimeEntry) => (
-                                    <li key={entry.id} className={`${styles.text} ${styles.listItem}`}>
+                                    <li key={entry.id} id={String(entry.id)} className={`${styles.text} ${styles.listItem}`}>
                                         {new Date(entry.time_seconds * 1000).toISOString().slice(11, 19)}
                                     </li>
                                 ))}
@@ -61,8 +95,25 @@ export default function TimeEntryName(props: any) {
                         setJsxResult(
                             <ul className={styles.list}>
                                 {result.map((entry: TimeEntry) => (
-                                    <li key={entry.id} className={`${styles.text} ${styles.listItem}`}>
+                                    <li key={entry.id} id={String(entry.id)} className={`${styles.text} ${styles.listItem}`}>
                                         {howToFormat.format(new Date(entry.time_added))}
+                                    </li>
+                                ))}
+                            </ul>
+                        );
+                    } else if (type === "delete-button") {
+                        setJsxResult(
+                            <ul className={styles.list}>
+                                {result.map((entry: TimeEntry) => (
+                                    <li key={entry.id} className={`${styles.text} ${styles.listItem}`} onClick={deleteTimeEntry}>
+                                        <button className={styles.button} id={String(entry.id)} type='button'>
+                                            <img 
+                                                src="/images/trash.svg" 
+                                                alt="Picture of trash can for delete symbol" 
+                                                className={styles.trash}
+                                                id={String(entry.id)}
+                                            />
+                                        </button>
                                     </li>
                                 ))}
                             </ul>

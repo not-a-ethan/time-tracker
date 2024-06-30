@@ -83,23 +83,7 @@ function Page({ params }: { params: { slug: string } }) {
         return;
     }
 
-    const timeEntry = (endpoint: string, data: any) => {
-        fetch(`/api/project/get?type=id&id=${id}`)
-        .then(response => response.json())
-        .then(projectData => {
-            const seconds = (Number(data["time_hours"]) * 60 * 60) + (Number(data["time_minutes"]) * 60) + Number(data["time_seconds"])
-
-            const newData = {
-                entryName: data["entryName"],
-                slug: projectData[0]["slug"],
-                time_seconds: seconds
-            }
-    
-            apiReqeusts(endpoint, newData)
-        })
-    }
-
-    const apiReqeusts = (endpoint: string, data: any) => {
+const apiReqeusts = (endpoint: string, data: any) => {
         fetch(endpoint, {
             method: 'POST',
             headers: {
@@ -120,6 +104,23 @@ function Page({ params }: { params: { slug: string } }) {
             console.error('Error:', error)
         });
     }
+    const timeEntry = (endpoint: string, data: any) => {
+        fetch(`/api/project/get?type=id&id=${id}`)
+        .then(response => response.json())
+        .then(projectData => {
+            const seconds = (Number(data["time_hours"]) * 60 * 60) + (Number(data["time_minutes"]) * 60) + Number(data["time_seconds"])
+
+            const newData = {
+                entryName: data["entryName"],
+                slug: projectData[0]["slug"],
+                time_seconds: seconds
+            }
+    
+            apiReqeusts(endpoint, newData)
+        })
+    }
+
+    
     
     function confirmation() {        
         const element = document.getElementsByClassName("trueSubmit")[0]
@@ -193,6 +194,12 @@ function Page({ params }: { params: { slug: string } }) {
                         <div className={styles.column5}>
                             <TimeEntryName id={id} type="dateMade" />
                         </div>
+
+                        <div className={`${styles.column6} ${styles.dividers}`}></div>
+
+                        <div className={styles.column7}>
+                            <TimeEntryName id={id} type="delete-button" />
+                        </div>
                     </div>
 
                     <div className={`${styles.column2} ${styles.timeStuff} ${styles.text}`}>
@@ -265,7 +272,6 @@ function Page({ params }: { params: { slug: string } }) {
                         </form>
                     </div>
                 </div>
-
                 <Toaster />
             </>
         )
