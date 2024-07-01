@@ -21,9 +21,11 @@ export default function TimeEntryName(props: any) {
                 apiReqeusts("/api/time/removeEntry", {id: `${id}`}, "DELETE")
             } catch (error) {
                 console.log(error)
+                return;
             }
         } else {
             toast.error("Deletion canceled")
+            return;
         }
     }
 
@@ -43,6 +45,11 @@ export default function TimeEntryName(props: any) {
             }
             
             return response
+        }).then(data => {
+            if (endpoint === "/api/time/removeEntry") {
+                sessionStorage.removeItem(`${id}-timeEntries`)
+                window.location.reload()
+            }
         })
         .catch((error) => {
             console.error(error)
