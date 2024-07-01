@@ -23,7 +23,7 @@ export default function TimeEntryName(props: any) {
                 console.log(error)
             }
         } else {
-            //toast.error("Deletion canceled")
+            toast.error("Deletion canceled")
         }
     }
 
@@ -37,9 +37,9 @@ export default function TimeEntryName(props: any) {
         })
         .then(response => {
             if (response.status === 200) {
-                //toast.success("API request successful!")
+                toast.success("API request successful!")
             } else {
-                //toast.error("Something went wrong")
+                toast.error("Something went wrong")
             }
             
             return response
