@@ -1,6 +1,10 @@
+'use client'
+
 import { useEffect, useState } from 'react';
 
 import toast from 'react-hot-toast'
+
+import { confirm } from "../../../../utils/confirm"
 
 import TimeEntries from '../[slug]/Javascript/getTimeEntries'
 
@@ -11,18 +15,16 @@ export default function TimeEntryName(props: any) {
     const type = props.type;
 
     const deleteTimeEntry = async (e: any) => {
-        if (confirm("Are you sure you want to delete the time entry?")){
+        if (await confirm("Are you sure you want to delete the time entry?")){
             try {
                 const id = e.target.id;
                 apiReqeusts("/api/time/removeEntry", {id: `${id}`}, "DELETE")
             } catch (error) {
+                console.log(error)
             }
-            return;
         } else {
             //toast.error("Deletion canceled")
         }
-        
-        return;
     }
 
     const apiReqeusts = (endpoint: string, data: any, method: string) => {
@@ -43,7 +45,7 @@ export default function TimeEntryName(props: any) {
             return response
         })
         .catch((error) => {
-            console.error('Error:', error)
+            console.error(error)
         });
     }
 

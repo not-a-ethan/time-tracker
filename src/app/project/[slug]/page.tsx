@@ -10,14 +10,14 @@ import { useForm, Controller } from 'react-hook-form';
 
 import toast, { Toaster } from 'react-hot-toast'
 
-import  Button  from '../../components/button'
-import  ShortTextInput  from '../../components/input'
+import styles from './styles.module.css'
+
+import Button  from '../../components/button'
+import ShortTextInput  from '../../components/input'
 
 import ProjectName from './Javascript/projectName'
 import TimeEntryName from '../components/entryName'
 import PastTime from "../components/pastTime"
-
-import styles from './styles.module.css'
 
 function Page({ params }: { params: { slug: string } }) {
     const router = useRouter();
@@ -148,7 +148,7 @@ const apiReqeusts = (endpoint: string, data: any) => {
         }
 
         return (
-            <>
+            <div className={styles.all}>
                 <div className={styles.header}>
                     <h1 className={styles.text}>
                         <a href='/'>
@@ -273,7 +273,7 @@ const apiReqeusts = (endpoint: string, data: any) => {
                     </div>
                 </div>
                 <Toaster />
-            </>
+            </div>
         )
     }
 
