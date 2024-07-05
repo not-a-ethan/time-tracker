@@ -90,6 +90,10 @@
 .trueSubmit {
     display: none;
 }
+
+.formDelete {
+    display: inline;
+}
   
 .form {
     display: grid;

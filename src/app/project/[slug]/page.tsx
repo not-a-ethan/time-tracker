@@ -162,7 +162,7 @@ const apiReqeusts = (endpoint: string, data: any) => {
 
                     <iframe name="dummyframe2" id="dummyframe" className={styles.iframe}></iframe>
 
-                    <form target="dummyframe2" className={styles.form} onSubmit={handleSubmit((e) => createOnSubmitHandler('/api/project/remove', e))} >
+                    <form target="dummyframe2" className={styles.formDelete} onSubmit={handleSubmit((e) => createOnSubmitHandler('/api/project/remove', e))} >
                         <button className={styles.button} id="trueSubmit" onClick={confirmation} type='button' >
                             <img 
                                 src="/images/trash.svg" 
