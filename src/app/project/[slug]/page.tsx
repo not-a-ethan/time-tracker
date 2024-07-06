@@ -30,21 +30,6 @@ function Page({ params }: { params: { slug: string } }) {
 
     const createOnSubmitHandler = (endpoint: string, event: any) => {
         const values: any = {};
-
-        try {
-            for (let i = 0; i < event.target.length; i++) {
-                const element = event.target[i];
-                if (element.name && element.value) {
-                    values[element.name] = element.value;
-                }
-            }
-        } catch (error) {
-            console.error(error)
-            if (endpoint === "/api/project/remove") {
-                deleteSubmitHandler(endpoint, values)
-            }
-            return;
-        }
         
         if (endpoint === "/api/time/addEntry") {
             timeEntry(endpoint, values)
@@ -53,9 +38,8 @@ function Page({ params }: { params: { slug: string } }) {
         return (SubmitEvent: any) => SubmitEvent.preventDefault();
     }
 
-    async function deleteSubmitHandler(endpoint: string, data: any) {
+    async function deleteSubmitHandler() {
         if (!await confirm("Are you sure you want to delete the project")) {
-            //toast.error("Deletion canceled.")
             return;
         }
 
@@ -72,7 +56,7 @@ function Page({ params }: { params: { slug: string } }) {
         })
         .catch((error) => console.error(error))
         .then(data => 
-            fetch(endpoint, {
+            fetch("/api/project/remove", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -92,6 +76,7 @@ function Page({ params }: { params: { slug: string } }) {
         )
  
         router.push("/")
+        window.location.reload()
         return;
     }
 
@@ -163,7 +148,7 @@ const apiReqeusts = (endpoint: string, data: any) => {
 
                     <iframe name="dummyframe2" id="dummyframe" className={styles.iframe}></iframe>
 
-                    <form target="dummyframe2" className={styles.formDelete} id='deleteProject' onSubmit={handleSubmit((e) => createOnSubmitHandler('/api/project/remove', e))}>
+                    <form target="dummyframe2" className={styles.formDelete} id='deleteProject' onSubmit={deleteSubmitHandler}>
                         <button className={styles.button} id="trueSubmit" type='submit' >
                             <img 
                                 src="/images/trash.svg" 
