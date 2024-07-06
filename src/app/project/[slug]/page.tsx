@@ -30,6 +30,17 @@ function Page({ params }: { params: { slug: string } }) {
 
     const createOnSubmitHandler = (endpoint: string, event: any) => {
         const values: any = {};
+
+        try {
+            for (let i = 0; i < event.target.length; i++) {
+                const element = event.target[i];
+                if (element.name && element.value) {
+                    values[element.name] = element.value;
+                }
+            }
+        } catch (error) {
+            return;
+        }
         
         if (endpoint === "/api/time/addEntry") {
             timeEntry(endpoint, values)
@@ -97,6 +108,7 @@ const apiReqeusts = (endpoint: string, data: any) => {
             success: "Request sucessful!"
         })
     }
+    
     const timeEntry = (endpoint: string, data: any) => {
         fetch(`/api/project/get?type=id&id=${id}`)
         .then(response => response.json())

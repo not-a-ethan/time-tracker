@@ -20,8 +20,6 @@ import { getTimeData } from './Javascript/getTimeData'
 
 import Button  from './components/button'
 import ShortTextInput  from './components/input'
-import { resolve } from 'path'
-import { rejects } from 'assert'
 
 /*
 export const metadata: Metadata = {
@@ -54,7 +52,7 @@ function Index() {
 
     const timeEntry = (endpoint: string, data: any) => {
         const seconds = (Number(data["target"][2].value) * 60 * 60) + (Number(data["target"][3].value) * 60) + Number(data["target"][4].value)
-        console.log(data)
+
         const newData = {
             entryName: data["target"][1].value,
             slug: data["target"][0].value,
