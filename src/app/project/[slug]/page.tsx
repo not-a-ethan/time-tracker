@@ -43,17 +43,10 @@ function Page({ params }: { params: { slug: string } }) {
             return;
         }
 
-        fetch(`/api/project/get?type=id&id=${id}`, {
+        const response = fetch(`/api/project/get?type=id&id=${id}`, {
             method: "GET",
         })
         .then(response => response.json())
-        .then(data => {
-            if (data.status !== 200) {
-                toast.error(data.error)
-            }
-            
-            return data
-        })
         .catch((error) => console.error(error))
         .then(data => 
             fetch("/api/project/remove", {
@@ -63,17 +56,14 @@ function Page({ params }: { params: { slug: string } }) {
                 },
                 body: JSON.stringify({ deleteSlug: data[0].project_name })
             })
-            .then(response => {
-                if (response.status === 200) {
-                    toast.success("API request successful!")
-                } else {
-                    toast.error("Something went wrong")
-                }
-                
-                return response
-            })
             .catch((error) => console.error('Error:', error))
         )
+
+        toast.promise(response, {
+            loading: "Sending request...",
+            error: "Something went wrong. Details in console",
+            success: "Request sucessful!"
+        })
  
         router.push("/")
         window.location.reload()
@@ -81,6 +71,7 @@ function Page({ params }: { params: { slug: string } }) {
     }
 
 const apiReqeusts = (endpoint: string, data: any) => {
+    const promise = new Promise((resolve, reject) => {
         fetch(endpoint, {
             method: 'POST',
             headers: {
@@ -90,16 +81,21 @@ const apiReqeusts = (endpoint: string, data: any) => {
         })
         .then(response => {
             if (response.status === 200) {
-                toast.success("API request successful!")
+            resolve("")
             } else {
-                toast.error("Something went wrong")
+            reject(new Error('Request failed with status code ' + response.status))
             }
-            
-            return response
         })
         .catch((error) => {
             console.error('Error:', error)
         });
+    })
+
+        toast.promise(promise, {
+            loading: "Sending request...",
+            error: "Something went wrong. Details in console",
+            success: "Request sucessful!"
+        })
     }
     const timeEntry = (endpoint: string, data: any) => {
         fetch(`/api/project/get?type=id&id=${id}`)

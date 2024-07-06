@@ -1,7 +1,5 @@
 'use client'
 
-import { revalidateTag } from 'next/cache'
-
 import { useEffect, useState } from 'react';
 
 import toast from 'react-hot-toast'
@@ -32,27 +30,31 @@ export default function TimeEntryName(props: any) {
     }
 
     const apiReqeusts = (endpoint: string, data: any, method: string) => {
-        fetch(endpoint, {
-            method: `${method}`,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
+        const promise = new Promise((resolve, reject) => {
+            fetch(endpoint, {
+                method: `${method}`,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (response.status === 200) {
+                resolve("")
+                } else {
+                reject(new Error('Request failed with status code ' + response.status))
+                }
+            })
+            .catch((error) => {
+                console.error(error)
+            });
         })
-        .then(response => {
-            if (response.status === 200) {
-                toast.success("API request successful!")
-            } else {
-                toast.error("Something went wrong")
-            }
-            
-            return response
-        }).then(data => {
-            revalidateTag(`${id}-timeEntries`)
+
+        toast.promise(promise, {
+            loading: "Sending request...",
+            error: "Something went wrong. Details in console",
+            success: "Request sucessful!"
         })
-        .catch((error) => {
-            console.error(error)
-        });
     }
 
     const [jsxResult, setJsxResult] = useState(<div>Loading...</div>);

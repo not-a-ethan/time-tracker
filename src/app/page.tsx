@@ -20,6 +20,8 @@ import { getTimeData } from './Javascript/getTimeData'
 
 import Button  from './components/button'
 import ShortTextInput  from './components/input'
+import { resolve } from 'path'
+import { rejects } from 'assert'
 
 /*
 export const metadata: Metadata = {
@@ -51,11 +53,11 @@ function Index() {
     }
 
     const timeEntry = (endpoint: string, data: any) => {
-        const seconds = (Number(data["time_hours"]) * 60 * 60) + (Number(data["time_minutes"]) * 60) + Number(data["time_seconds"])
-
+        const seconds = (Number(data["target"][2].value) * 60 * 60) + (Number(data["target"][3].value) * 60) + Number(data["target"][4].value)
+        console.log(data)
         const newData = {
-            entryName: data["entryName"],
-            slug: data["slug"],
+            entryName: data["target"][1].value,
+            slug: data["target"][0].value,
             time_seconds: seconds
         }
 
@@ -66,25 +68,32 @@ function Index() {
 
 
     const apiReqeusts = (endpoint: string, data: any) => {
-        fetch(endpoint, {
-            method: 'POST',
-            headers: {
+        const promise = new Promise((resolve, reject) => {
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    resolve("")
+                } else {
+                    reject(new Error('Request failed with status code ' + response.status))
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error)
+                reject(error)
+            });
         })
-        .then(response => {
-            if (response.status === 200) {
-                toast.success("API request successful!")
-            } else {
-                toast.error("Something went wrong")
-            }
-            
-            return response
+
+        toast.promise(promise, {
+            loading: "Sending request...",
+            error: "Something went wrong. Details in console",
+            success: "Request sucessful!"
         })
-        .catch((error) => {
-            console.error('Error:', error)
-        });
     }
 
     const { data: session, status } = useSession()
