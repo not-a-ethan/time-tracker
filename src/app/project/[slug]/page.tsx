@@ -18,6 +18,7 @@ import ShortTextInput  from '../../components/input'
 import ProjectName from './Javascript/projectName'
 import TimeEntryName from '../components/entryName'
 import PastTime from "../components/pastTime"
+import { confirm } from '../../../../utils/confirm'
 
 function Page({ params }: { params: { slug: string } }) {
     const router = useRouter();
@@ -28,25 +29,39 @@ function Page({ params }: { params: { slug: string } }) {
     const id = Number(params.slug);
 
     const createOnSubmitHandler = (endpoint: string, event: any) => {
+        console.log("submit handler")
         const values: any = {};
-        
-        for (let i = 0; i < event.target.length; i++) {
-            const element = event.target[i];
-            if (element.name && element.value) {
-                values[element.name] = element.value;
+
+        try {
+            for (let i = 0; i < event.target.length; i++) {
+                const element = event.target[i];
+                if (element.name && element.value) {
+                    values[element.name] = element.value;
+                }
             }
+        } catch (error) {
+            console.error(error)
+            if (endpoint === "/api/project/remove") {
+                console.log("deleteSubmitHandler")
+                deleteSubmitHandler(endpoint, values)
+            }
+            return;
         }
         
         if (endpoint === "/api/time/addEntry") {
             timeEntry(endpoint, values)
-        } else if (endpoint === "/api/project/remove") {
-            deleteSubmitHandler(endpoint, values)
         }
 
         return (SubmitEvent: any) => SubmitEvent.preventDefault();
     }
 
-    const deleteSubmitHandler = (endpoint: string, data: any) => {
+    async function deleteSubmitHandler(endpoint: string, data: any) {
+        if (!await confirm("Are you sure you want to delete the project")) {
+            console.log("Deletion canceled.")
+            //toast.error("Deletion canceled.")
+            return;
+        }
+
         fetch(`/api/project/get?type=id&id=${id}`, {
             method: "GET",
         })
@@ -120,17 +135,6 @@ const apiReqeusts = (endpoint: string, data: any) => {
         })
     }
 
-    
-    
-    function confirmation() {        
-        const element = document.getElementsByClassName("trueSubmit")[0]
-
-        if (element !== null) {
-            const button = element as HTMLElement
-            button.style.display = "block";
-        }
-    }
-
     const renderContent = () => {
         if (status === "loading") {
             return (<p>Loading...</p>)
@@ -162,18 +166,14 @@ const apiReqeusts = (endpoint: string, data: any) => {
 
                     <iframe name="dummyframe2" id="dummyframe" className={styles.iframe}></iframe>
 
-                    <form target="dummyframe2" className={styles.formDelete} onSubmit={handleSubmit((e) => createOnSubmitHandler('/api/project/remove', e))} >
-                        <button className={styles.button} id="trueSubmit" onClick={confirmation} type='button' >
+                    <form target="dummyframe2" className={styles.formDelete} id='deleteProject' onSubmit={handleSubmit((e) => createOnSubmitHandler('/api/project/remove', e))}>
+                        <button className={styles.button} id="trueSubmit" type='submit' >
                             <img 
                                 src="/images/trash.svg" 
                                 alt="Picture of trash can for delete symbol" 
                                 className={styles.trash}
                             />
                         </button>
-
-                        <div className={`trueSubmit ${styles.trueSubmit}`} >
-                            <button type='submit'>Are you sure you want to do this?</button>
-                        </div>
                     </form>
                 </div>
 
