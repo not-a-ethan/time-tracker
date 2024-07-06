@@ -1,5 +1,7 @@
 'use client'
 
+import { revalidateTag } from 'next/cache'
+
 import { useEffect, useState } from 'react';
 
 import toast from 'react-hot-toast'
@@ -46,10 +48,7 @@ export default function TimeEntryName(props: any) {
             
             return response
         }).then(data => {
-            if (endpoint === "/api/time/removeEntry") {
-                sessionStorage.removeItem(`${id}-timeEntries`)
-                window.location.reload()
-            }
+            revalidateTag(`${id}-timeEntries`)
         })
         .catch((error) => {
             console.error(error)
