@@ -29,7 +29,6 @@ function Page({ params }: { params: { slug: string } }) {
     const id = Number(params.slug);
 
     const createOnSubmitHandler = (endpoint: string, event: any) => {
-        console.log("submit handler")
         const values: any = {};
 
         try {
@@ -42,7 +41,6 @@ function Page({ params }: { params: { slug: string } }) {
         } catch (error) {
             console.error(error)
             if (endpoint === "/api/project/remove") {
-                console.log("deleteSubmitHandler")
                 deleteSubmitHandler(endpoint, values)
             }
             return;
@@ -57,7 +55,6 @@ function Page({ params }: { params: { slug: string } }) {
 
     async function deleteSubmitHandler(endpoint: string, data: any) {
         if (!await confirm("Are you sure you want to delete the project")) {
-            console.log("Deletion canceled.")
             //toast.error("Deletion canceled.")
             return;
         }
