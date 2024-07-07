@@ -199,7 +199,7 @@ const apiReqeusts = (endpoint: string, data: any) => {
 
                         <iframe name="dummyframe3" id="dummyframe" className={styles.iframe}></iframe>
 
-                        <form method="POST" target="dummyframe3" className={styles.form} onSubmit={(e) => handleSubmit(createOnSubmitHandler('/api/time/addEntry', e))}>
+                        <form method="POST" target="dummyframe3" className={styles.form} onSubmit={(e) => createOnSubmitHandler('/api/time/addEntry', e)}>
                             <div className={`${styles["form-input"]}`}>
                                 <Controller
                                     name="entryName"
