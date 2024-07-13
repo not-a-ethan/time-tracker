@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 
 import { useForm, Controller } from 'react-hook-form';
 
-import toast, { Toaster } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import styles from './styles.module.css'
 
@@ -277,8 +277,6 @@ function Index() {
                     <p className={styles.timeTracked}>Total time tracked: <span id="totalTime"></span></p>
                 </div>
             </main>
-
-            <Toaster />
         </div>
     )
 }

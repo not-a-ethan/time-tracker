@@ -2,6 +2,8 @@ import { AppProps } from 'next/app'
 import { SessionProvider } from "next-auth/react"
 import Head from 'next/head'
 
+import { Toaster } from "sonner"
+
 import { Providers } from './providers'
 
 import '../styles/globals.css'
@@ -21,6 +23,7 @@ export default function RootLayout({
         </Head>
         <body>
           <Providers>{children}</Providers>
+          <Toaster />
         </body>
       </html>
     )

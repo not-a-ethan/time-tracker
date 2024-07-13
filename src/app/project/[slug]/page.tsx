@@ -8,7 +8,7 @@ import { useSession, getSession } from "next-auth/react"
 
 import { useForm, Controller } from 'react-hook-form';
 
-import toast, { Toaster } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import styles from './styles.module.css'
 
@@ -49,79 +49,97 @@ function Page({ params }: { params: { slug: string } }) {
         return (SubmitEvent: any) => SubmitEvent.preventDefault();
     }
 
-    async function deleteSubmitHandler() {
-        if (!await confirm("Are you sure you want to delete the project")) {
-            return;
-        }
+    const deleteSubmitHandler = () => {
+        confirm("Are you sure you want to delete the project").then(async (confirmed) => {
+            if (confirmed) {
+                const promise = new Promise((resolve, reject) => {
+                    const response = fetch(`/api/project/get?type=id&id=${id}`, {
+                        method: "GET",
+                    })
+                    .then(response => response.json())
+                    .catch((error) => {
+                        console.error(error)
+                        reject()
+                    })
+                    .then(data => {
+                        fetch("/api/project/remove", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ deleteSlug: data[0].project_name })
+                        })
+                       .then(response => {
+                            if (response.status === 200) {
+                            resolve("");
+                            } else {
+                            reject(new Error('Request failed with status code'+ response.status));
+                            }
+                        })
+                       .catch((error) => {
+                            console.error('Error:', error);
+                            reject();
+                        });
+                    })
+                });
 
-        const response = fetch(`/api/project/get?type=id&id=${id}`, {
-            method: "GET",
-        })
-        .then(response => response.json())
-        .catch((error) => console.error(error))
-        .then(data => 
-            fetch("/api/project/remove", {
-                method: 'POST',
+                toast.promise(promise, {
+                    loading: "Sending request...",
+                    error: "Something went wrong. Details in console",
+                    success: "Request successful!"
+                });
+
+                router.replace("/");
+            }
+        });
+    };
+
+    const apiReqeusts = (endpoint: string, data: any, method: string) => {
+        const promise = new Promise((resolve, reject) => {
+            fetch(endpoint, {
+                method: `${method}`,
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ deleteSlug: data[0].project_name })
+                body: JSON.stringify(data),
             })
-            .catch((error) => console.error('Error:', error))
-        )
-
-        toast.promise(response, {
-            loading: "Sending request...",
-            error: "Something went wrong. Details in console",
-            success: "Request sucessful!"
-        })
- 
-        router.push("/")
-        window.location.reload()
-        return;
-    }
-
-const apiReqeusts = (endpoint: string, data: any) => {
-    const promise = new Promise((resolve, reject) => {
-        fetch(endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-        .then(response => {
-            if (response.status === 200) {
-            resolve("")
-            } else {
-            reject(new Error('Request failed with status code ' + response.status))
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error)
+           .then(response => {
+                if (response.ok) {
+                    resolve("");
+                } else {
+                    throw new Error('Request failed with status code'+ response.status);
+                }
+            })
+           .catch((error) => {
+                console.error('Error:', error);
+                reject();
+            });
         });
-    })
 
         toast.promise(promise, {
             loading: "Sending request...",
             error: "Something went wrong. Details in console",
-            success: "Request sucessful!"
-        })
-    }
+            success: "Request successful!"
+        });
+    };
     
     const timeEntry = (endpoint: string, data: any) => {
-        fetch(`/api/project/get?type=id&id=${id}`)
-        .then(response => response.json())
-        .then(projectData => {
-            const seconds = (Number(data["time_hours"]) * 60 * 60) + (Number(data["time_minutes"]) * 60) + Number(data["time_seconds"])
+        const seconds = (Number(data["time_hours"]) * 60 * 60) + (Number(data["time_minutes"]) * 60) + Number(data["time_seconds"])
 
+        fetch(`/api/project/get?type=id&id=${id}`, {
+            method: "GET",
+        })
+        .then(response => response.json())
+        .catch((error) => console.error(error))
+        .then(requestData => {
+            const projectSlug = requestData[0].slug
             const newData = {
                 entryName: data["entryName"],
-                slug: projectData[0]["slug"],
+                slug: projectSlug,
                 time_seconds: seconds
             }
-    
-            apiReqeusts(endpoint, newData)
+
+            apiReqeusts(endpoint, newData, "POST")
         })
     }
 
@@ -262,7 +280,6 @@ const apiReqeusts = (endpoint: string, data: any) => {
                         </form>
                     </div>
                 </div>
-                <Toaster />
             </div>
         )
     }

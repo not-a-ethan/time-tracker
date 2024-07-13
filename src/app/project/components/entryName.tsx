@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { confirm } from "../../../../utils/confirm"
 
@@ -14,22 +14,27 @@ export default function TimeEntryName(props: any) {
     const id = Number(props.id);
     const type = props.type;
 
-    const deleteTimeEntry = async (e: any) => {
-        if (await confirm("Are you sure you want to delete the time entry?")){
+    function deleteTimeEntry(e: any): boolean | void {
+        confirm("Are you sure you want to delete the time entry?").then((result) => {
+            if (!result) {
+                return false;
+            }
+
+            let id;
+
             try {
-                const id = e.target.id;
-                apiReqeusts("/api/time/removeEntry", {id: `${id}`}, "DELETE")
+                id = e.target.id;
+                
             } catch (error) {
                 console.log(error)
                 return;
             }
-        } else {
-            toast.error("Deletion canceled")
-            return;
-        }
+
+            apiReqeusts("/api/time/removeEntry", {id: `${id}`}, "DELETE")
+        })
     }
 
-    const apiReqeusts = (endpoint: string, data: any, method: string) => {
+    const apiReqeusts = async (endpoint: string, data: any, method: string) => {
         const promise = new Promise((resolve, reject) => {
             fetch(endpoint, {
                 method: `${method}`,
@@ -40,22 +45,23 @@ export default function TimeEntryName(props: any) {
             })
             .then(response => {
                 if (response.status === 200) {
-                resolve("")
+                    resolve("")
                 } else {
-                reject(new Error('Request failed with status code ' + response.status))
+                    throw new Error('Request failed with status code'+ response.status);
                 }
             })
             .catch((error) => {
-                console.error(error)
+                console.error('Error:', error);
+                reject("")
             });
         })
-
+        
         toast.promise(promise, {
             loading: "Sending request...",
-            error: "Something went wrong. Details in console",
-            success: "Request sucessful!"
+            success: "Request sucessful!",
+            error: "Something went wrong. Details in console"
         })
-    }
+    };
 
     const [jsxResult, setJsxResult] = useState(<div>Loading...</div>);
 
