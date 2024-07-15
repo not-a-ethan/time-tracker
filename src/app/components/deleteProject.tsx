@@ -1,5 +1,7 @@
 import { useForm, Controller } from 'react-hook-form';
 
+import { toast } from "sonner"
+
 import apiReqeusts from "../../../utils/apiRequest";
 
 import Button from "../../components/button"
@@ -16,6 +18,11 @@ function DeleteProject() {
             if (element.name && element.value) {
             values[element.name] = element.value;
             }
+        }
+
+        if (values["deleteSlug"] === "" || values["deleteSlug"] === undefined || values["deleteSlug"] === null) {
+            toast.error("Project name is invalid")
+            return (SubmitEvent: any) => SubmitEvent.preventDefault();
         }
         
         apiReqeusts(endpoint, values)

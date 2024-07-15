@@ -1,5 +1,7 @@
 import { useForm, Controller } from 'react-hook-form';
 
+import { toast } from "sonner"
+
 import apiReqeusts from "../../../utils/apiRequest";
 
 import Button from "../../components/button"
@@ -13,9 +15,15 @@ function NewProject() {
         
         for (let i = 0; i < event.target.length; i++) {
             const element = event.target[i];
+
             if (element.name && element.value) {
-            values[element.name] = element.value;
+                values[element.name] = element.value;
             }
+        }
+
+        if (values["newProject"] === "" || values["newProject"] === undefined || values["newProject"] === null) {
+            toast.error("Project name is invalid")
+            return (SubmitEvent: any) => SubmitEvent.preventDefault();
         }
         
         apiReqeusts(endpoint, values)

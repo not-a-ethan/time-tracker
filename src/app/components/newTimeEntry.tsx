@@ -1,6 +1,9 @@
 import { useForm, Controller } from 'react-hook-form';
 
+import { toast } from "sonner"
+
 import apiReqeusts from "../../../utils/apiRequest";
+import { isStringNum } from '../../../utils/isStringNum';
 
 import Button from "../../components/button"
 import ShortTextInput  from '../../components/input'
@@ -9,31 +12,47 @@ import styles from "./styles/newTimeEntry.module.css"
 
 function NewTimeEntry() {
     const timeEntry = (endpoint: string, data: any) => {
-        const seconds = (Number(data["target"][2].value) * 60 * 60) + (Number(data["target"][3].value) * 60) + Number(data["target"][4].value)
+        const slug: string = data["target"][0].value
+        const entryName: string = data["target"][1].value
+        const hours: string = data["target"][2].value
+        const minutes: string = data["target"][3].value
+        const secondsAlone: string = data["target"][4].value
+
+        if (slug === "" || slug === undefined || slug === null) {
+            toast.error("Slug is invalid")
+            return (SubmitEvent: any) => SubmitEvent.preventDefault();
+        }
+
+        if (entryName === "" || entryName === undefined || entryName === null) {
+            toast.error("Entry Name is invalid")
+            return (SubmitEvent: any) => SubmitEvent.preventDefault();
+        }
+
+        if (!(isStringNum(hours) || hours === "")) {
+            toast.error("The value for hours is not a number")
+            return (SubmitEvent: any) => SubmitEvent.preventDefault();
+        }
+
+        if (!(isStringNum(minutes) || minutes === "")) {
+            toast.error("The value for minutes is not a number")
+            return (SubmitEvent: any) => SubmitEvent.preventDefault();
+        }
+
+        if (!(isStringNum(secondsAlone) || secondsAlone === "")) {
+            toast.error("The value for seconds is not a number")
+            return (SubmitEvent: any) => SubmitEvent.preventDefault();
+        }
+
+        const seconds: Number = (Number(hours) * 60 * 60) + (Number(minutes) * 60) + Number(secondsAlone)
 
         const newData = {
-            entryName: data["target"][1].value,
-            slug: data["target"][0].value,
+            entryName: `${entryName}`,
+            slug: `${slug}`,
             time_seconds: seconds
         }
 
         apiReqeusts(endpoint, newData)
 
-        return (SubmitEvent: any) => SubmitEvent.preventDefault();
-    }
-
-    const createOnSubmitHandler = (endpoint: string, event: any) => {
-        const values: any = {};
-        
-        for (let i = 0; i < event.target.length; i++) {
-            const element = event.target[i];
-            if (element.name && element.value) {
-            values[element.name] = element.value;
-            }
-        }
-        
-        apiReqeusts(endpoint, values)
-    
         return (SubmitEvent: any) => SubmitEvent.preventDefault();
     }
 
