@@ -1,6 +1,6 @@
 'use client'
 
-import Confirmation, { Props as ConfimationProps } from '../src/app/components/Confirmation';
+import Confirmation, { Props as ConfimationProps } from '../src/components/Confirmation';
 import { createConfirmation } from 'react-confirm';
 
 const defaultConfirmation = createConfirmation(Confirmation);

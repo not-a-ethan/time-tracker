@@ -12,8 +12,8 @@ import { toast } from 'sonner'
 
 import styles from './styles.module.css'
 
-import Button  from '../../components/button'
-import ShortTextInput  from '../../components/input'
+import Button  from '../../../components/button'
+import ShortTextInput  from '../../../components/input'
 
 import ProjectName from './Javascript/projectName'
 import TimeEntryName from '../components/entryName'

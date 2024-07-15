@@ -1,0 +1,20 @@
+.iframe {
+  display: none;
+}
+  
+.form {
+  display: grid;
+  width: fit-content;
+  grid-template-columns: 50% 50%;
+  gap: 4%;
+}
+  
+.form-submit {
+  grid-column: 2;
+  width: 5vw;
+}
+
+.form-input {
+  grid-column: 1;
+  width: 5vw;
+}
