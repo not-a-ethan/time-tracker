@@ -1,9 +1,9 @@
 import { toast } from 'sonner'
 
-const apiReqeusts = (endpoint: string, data: any) => {
+const apiReqeusts = (endpoint: string, data: any, method: string = "POST") => {
     const promise = new Promise((resolve, reject) => {
         fetch(endpoint, {
-            method: 'POST',
+            method: `${method}`,
             headers: {
             'Content-Type': 'application/json',
             },

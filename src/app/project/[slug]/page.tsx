@@ -6,48 +6,24 @@ import { useRouter } from 'next/navigation'
 
 import { useSession, getSession } from "next-auth/react"
 
-import { useForm, Controller } from 'react-hook-form';
-
 import { toast } from 'sonner'
 
 import styles from './styles.module.css'
 
-import Button  from '../../../components/button'
-import ShortTextInput  from '../../../components/input'
-
 import ProjectName from './Javascript/projectName'
+
 import TimeEntryName from '../components/entryName'
 import PastTime from "../components/pastTime"
+import AddEntry from '../components/addEntry'
+
 import { confirm } from '../../../../utils/confirm'
 
 function Page({ params }: { params: { slug: string } }) {
     const router = useRouter();
-    const { handleSubmit, control } = useForm();
 
     const { data: session, status } = useSession();
 
     const id = Number(params.slug);
-
-    const createOnSubmitHandler = (endpoint: string, event: any) => {
-        const values: any = {};
-
-        try {
-            for (let i = 0; i < event.target.length; i++) {
-                const element = event.target[i];
-                if (element.name && element.value) {
-                    values[element.name] = element.value;
-                }
-            }
-        } catch (error) {
-            return;
-        }
-        
-        if (endpoint === "/api/time/addEntry") {
-            timeEntry(endpoint, values)
-        }
-
-        return (SubmitEvent: any) => SubmitEvent.preventDefault();
-    }
 
     const deleteSubmitHandler = () => {
         confirm("Are you sure you want to delete the project").then(async (confirmed) => {
@@ -122,26 +98,6 @@ function Page({ params }: { params: { slug: string } }) {
             success: "Request successful!"
         });
     };
-    
-    const timeEntry = (endpoint: string, data: any) => {
-        const seconds = (Number(data["time_hours"]) * 60 * 60) + (Number(data["time_minutes"]) * 60) + Number(data["time_seconds"])
-
-        fetch(`/api/project/get?type=id&id=${id}`, {
-            method: "GET",
-        })
-        .then(response => response.json())
-        .catch((error) => console.error(error))
-        .then(requestData => {
-            const projectSlug = requestData[0].slug
-            const newData = {
-                entryName: data["entryName"],
-                slug: projectSlug,
-                time_seconds: seconds
-            }
-
-            apiReqeusts(endpoint, newData, "POST")
-        })
-    }
 
     const renderContent = () => {
         if (status === "loading") {
@@ -215,69 +171,7 @@ function Page({ params }: { params: { slug: string } }) {
 
                         <br /><br />
 
-                        <iframe name="dummyframe3" id="dummyframe" className={styles.iframe}></iframe>
-
-                        <form method="POST" target="dummyframe3" className={styles.form} onSubmit={(e) => createOnSubmitHandler('/api/time/addEntry', e)}>
-                            <div className={`${styles["form-input"]}`}>
-                                <Controller
-                                    name="entryName"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <ShortTextInput
-                                            text="Entry name" 
-                                            height="2.5vh"
-                                            width="5vw"
-                                            {...field}
-                                        />
-                                    )}
-                                />
-
-                                <br />
-
-                                <Controller
-                                    name="time_hours"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <ShortTextInput
-                                            text="Hours" 
-                                            height="2.5vh"
-                                            width="5vw"
-                                            {...field} 
-                                        />
-                                    )}
-                                />
-
-                                <Controller
-                                    name="time_minutes"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <ShortTextInput
-                                            text="Minutes" 
-                                            height="2.5vh"
-                                            width="5vw"
-                                            {...field}
-                                        />
-                                    )}
-                                />
-
-                                <Controller
-                                    name="time_seconds"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <ShortTextInput
-                                            text="seconds" 
-                                            height="2.5vh"
-                                            width="5vw"
-                                            {...field}
-                                        />
-                                    )}
-                                />
-                            </div>
-
-                            <div className={styles["form-submit"]} style={{display: 'block', margin: 'auto 0', marginLeft: "7.5%"}}>
-                                <Button text="Add Time" type="submit"  height="2.5vh" />
-                            </div>
-                        </form>
+                        <AddEntry id={id} />
                     </div>
                 </div>
             </div>
