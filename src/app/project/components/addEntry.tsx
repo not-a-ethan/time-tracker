@@ -5,8 +5,8 @@ import { toast } from 'sonner'
 import apiReqeusts from '../../../../utils/apiRequest'
 import { isStringNum } from '../../../../utils/isStringNum';
 
-import Button  from '../../../components/button'
-import ShortTextInput  from '../../../components/input'
+import { Button } from "@nextui-org/button"
+import { Input } from "@nextui-org/input"
 
 import styles from "./css/addEntry.module.css"
 
@@ -88,9 +88,8 @@ function AddEntry(props: any) {
                         name="entryName"
                         control={control}
                         render={({ field }) => (
-                            <ShortTextInput
-                                text="Entry name" 
-                                height="2.5vh"
+                            <Input
+                                label="Entry name"
                                 width="5vw"
                                 {...field}
                             />
@@ -103,9 +102,8 @@ function AddEntry(props: any) {
                         name="time_hours"
                         control={control}
                         render={({ field }) => (
-                            <ShortTextInput
-                                text="Hours" 
-                                height="2.5vh"
+                            <Input
+                                label="Hours" 
                                 width="5vw"
                                 {...field} 
                             />
@@ -116,9 +114,8 @@ function AddEntry(props: any) {
                         name="time_minutes"
                         control={control}
                         render={({ field }) => (
-                            <ShortTextInput
-                                text="Minutes" 
-                                height="2.5vh"
+                            <Input
+                                label="Minutes" 
                                 width="5vw"
                                 {...field}
                             />
@@ -129,9 +126,8 @@ function AddEntry(props: any) {
                         name="time_seconds"
                         control={control}
                         render={({ field }) => (
-                            <ShortTextInput
-                                text="seconds" 
-                                height="2.5vh"
+                            <Input
+                                label="seconds" 
                                 width="5vw"
                                 {...field}
                             />
@@ -140,7 +136,7 @@ function AddEntry(props: any) {
                 </div>
 
                 <div className={styles["form-submit"]} style={{display: 'block', margin: 'auto 0', marginLeft: "7.5%"}}>
-                    <Button text="Add Time" type="submit"  height="2.5vh" />
+                    <Button type="submit">Add Time</Button>
                 </div>
             </form>
         </>

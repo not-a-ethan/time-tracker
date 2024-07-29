@@ -47,9 +47,9 @@ function Page({ params }: { params: { slug: string } }) {
                         })
                        .then(response => {
                             if (response.status === 200) {
-                            resolve("");
+                                resolve("");
                             } else {
-                            reject(new Error('Request failed with status code'+ response.status));
+                                reject(new Error('Request failed with status code'+ response.status));
                             }
                         })
                        .catch((error) => {

@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --primary-color-dark: #1A545B;
   --secondary-color-dark: #87CEFA;
@@ -9,4 +13,6 @@
 
 body {
   background-color: var(--primary-background-color-dark);
+  height: 100%;
+  width: 100%;
 }

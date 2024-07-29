@@ -2,10 +2,10 @@ import { useForm, Controller } from 'react-hook-form';
 
 import { toast } from "sonner"
 
-import apiReqeusts from "../../../utils/apiRequest";
+import { Button } from "@nextui-org/button"
+import { Input } from "@nextui-org/input"
 
-import Button from "../../components/button"
-import ShortTextInput  from '../../components/input'
+import apiReqeusts from "../../../utils/apiRequest";
 
 import styles from "./styles/deleteProject.module.css"
 
@@ -41,16 +41,19 @@ function DeleteProject() {
                     name="deleteSlug"
                     control={control}
                     render={({ field }) => (
-                        <ShortTextInput
-                            text="Project name" 
+                        <Input
+                            label="Project name" 
                             height="2.5vh"
                             width="5vw"
-                            {...field} 
+                            {...field}
+                            size="sm"
                         />
                     )}
                 />
 
-                <Button text="Delete Project" type="submit" className={styles["form-submit"]} height="2.5vh" />
+                <Button type="submit" className={styles["form-submit"]} >
+                    Delete Project
+                </Button>
             </form>
         </>
     )

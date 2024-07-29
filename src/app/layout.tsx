@@ -1,12 +1,18 @@
 import { AppProps } from 'next/app'
 import { SessionProvider } from "next-auth/react"
-import Head from 'next/head'
 
 import { Toaster } from "sonner"
 
 import { Providers } from './providers'
 
 import '../styles/globals.css'
+
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Home',
+  description: "Welcome to Next.js"
+}
 
 export default function RootLayout({
     children,
@@ -16,11 +22,6 @@ export default function RootLayout({
 
     return (
       <html>
-        <Head>
-          <title>Home</title>
-          <meta name="description" content="Welcome to Next.js" />
-          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        </Head>
         <body>
           <Providers>{children}</Providers>
           <Toaster />

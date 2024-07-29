@@ -11,10 +11,8 @@
 
 .form-input {
     grid-column: 1;
-    width: 5vw;
 }
 
 .form-submit {
     grid-column: 2;
-    width: 5vw;
 }

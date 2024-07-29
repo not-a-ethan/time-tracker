@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 
 import { useSession, getSession } from "next-auth/react"
 
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import styles from './styles.module.css'
 
@@ -41,28 +41,6 @@ function Index() {
         observer.observe(document.body, { childList: true, subtree: true });
         return () => observer.disconnect();
     }, []);
-
-    useEffect(() => {
-        const observer = new MutationObserver(() => {
-            const timeElement = document.getElementById("totalTime");
-            if (timeElement) {
-                getTimeData();
-                observer.disconnect();
-            }
-        });
-    
-        observer.observe(document.body, { childList: true, subtree: true });
-        return () => observer.disconnect();
-    }, []);
-
-    if (status === "loading") {
-        return (<p>Loading...</p>)
-    }
-
-    if (status === "unauthenticated") {
-        router.push("/login")
-        return (<p>Access Denied</p>)
-    }
 
     return (
         <div>

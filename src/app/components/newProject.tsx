@@ -2,10 +2,10 @@ import { useForm, Controller } from 'react-hook-form';
 
 import { toast } from "sonner"
 
-import apiReqeusts from "../../../utils/apiRequest";
+import { Button } from "@nextui-org/button"
+import { Input } from "@nextui-org/input"
 
-import Button from "../../components/button"
-import ShortTextInput  from '../../components/input'
+import apiReqeusts from "../../../utils/apiRequest";
 
 import styles from "./styles/newProject.module.css"
 
@@ -42,16 +42,18 @@ function NewProject() {
                     name="newProject"
                     control={control}
                     render={({ field }) => (
-                        <ShortTextInput
-                            text="Project name" 
-                            height="2.5vh"
+                        <Input
+                            label="Project name" 
                             width="5vw"
-                            {...field} 
+                            {...field}
+                            size="sm"
                         />
                     )}
                 />
 
-                <Button text="Create Project" type="submit" name="newProject" className={styles["form-submit"]} height="2.5vh" />
+                <Button type="submit" name="newProject" className={styles["form-submit"]}>
+                    Create Project
+                </Button>
             </form>
         </>
     )
