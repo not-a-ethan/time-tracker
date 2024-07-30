@@ -14,7 +14,6 @@ import styles from './styles.module.css'
 import { getProjects } from './Javascript/getProjects'
 import { getTimeData } from './Javascript/getTimeData'
 
-
 import NewProject from './components/newProject'
 import DeleteProject from './components/deleteProject'
 import NewTimeEntry from './components/newTimeEntry'
@@ -43,8 +42,8 @@ function Index() {
     }, []);
 
     return (
-        <div>
-            <h1 className={styles.header}>Time Tracker</h1>
+        <div className={styles.all}>
+            <h1 className={`${styles.header}`}>Time Tracker</h1>
 
             <main className={styles.main}>
 

@@ -1,5 +1,8 @@
-.main {
+.all {
   width: 100%;
+}
+
+.main {
   min-height: 100vh;
 
   display: grid;
@@ -8,6 +11,8 @@
 
   margin-left: 2.25%;
   margin-right: 2.25%;
+
+  color: hsl(var(--nextui-content4));
 }
 
 .rowOne {
@@ -31,7 +36,7 @@
 }
 
 .header {
-  color: var(--primary-color-dark);
+  color: hsl(var(--nextui-content4));
   font-family: Inter;
   font-size: 36px;
   font-style: normal;
@@ -39,12 +44,4 @@
   line-height: normal;
 
   text-align: center;
-}
-
-.projectList {
-  color: var(--primary-color-dark)
-}
-
-.timeTracked {
-  color: var(--primary-color-dark)
 }

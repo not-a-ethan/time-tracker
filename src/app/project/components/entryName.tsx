@@ -129,9 +129,9 @@ export default function TimeEntryName(props: any) {
                                         <button className={styles.button} id={String(entry.id)} type='button'>
                                             <img 
                                                 src="/images/trash.svg" 
-                                                alt="Picture of trash can for delete symbol" 
-                                                className={styles.trash}
+                                                alt="Picture of trash can for delete symbol"
                                                 id={String(entry.id)}
+                                                className={styles.trash}
                                             />
                                         </button>
                                     </li>
