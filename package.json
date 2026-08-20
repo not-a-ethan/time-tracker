@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@auth/pg-adapter": "^1.7.2",
+    "@auth/pg-adapter": "^1.11.3",
     "@nextui-org/react": "^2.4.6",
     "@nextui-org/system": "^2.2.5",
     "@nextui-org/theme": "^2.2.9",
@@ -20,7 +20,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.19",
     "intl-messageformat": "^10.5.14",
-    "next": "^16.2.12",
+    "next": "^16.3.0",
     "next-auth": "^4.24.15",
     "pg": "^8.11.3",
     "postgres": "^3.4.3",
